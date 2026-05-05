@@ -3,10 +3,6 @@ import { EstadosProyectosEnum } from "../enums/estados-proyectos.enum";
 import { Cliente } from "./cliente.entity";
 import { Tarea } from "./tarea.entity";
 
-
-
-
-
 @Entity({ name: "proyectos" })
 export class Proyecto {
 
@@ -24,9 +20,9 @@ export class Proyecto {
 
     @ManyToOne(()=>Cliente)
     @JoinColumn({name: "id_cliente"})
-    cliente!: Cliente
+    cliente!: Cliente;
 
     @OneToMany(()=>Tarea, (tarea)=> tarea.proyecto)
-    tareas!: Tarea[]
+    tareas!: Tarea[];
 
 }

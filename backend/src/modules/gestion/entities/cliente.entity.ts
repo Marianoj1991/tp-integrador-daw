@@ -1,9 +1,6 @@
-import { Column, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { EstadosClientesEnum } from "../enums/estados-clientes.enum";
 import { Proyecto } from "./proyecto.entity";
-
-
-
 
 @Entity({name: "clientes"})
 export class Cliente {
@@ -14,10 +11,9 @@ export class Cliente {
     nombre!: string;
 
     @Column({type: 'enum', enum: EstadosClientesEnum})
-    estado!: EstadosClientesEnum
+    estado!: EstadosClientesEnum;
 
     @OneToMany(() => Proyecto, (proyecto) => proyecto.cliente)
-    proyectos!: Proyecto []
+    proyectos!: Proyecto [];
     
-
 }

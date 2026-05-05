@@ -1,43 +1,32 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Tarea } from "../entities/tarea.entity";
 import { CreateTareaDto } from "../dtos/input/create-tarea.dto";
 import { EstadosTareasEnum } from "../enums/estados-tareas.enum";
 import { UpdateTareaDto } from "../dtos/input/update-tarea.dto";
-import { Repository } from "typeorm";
-import { Tarea } from "../entities/tarea.entity";
 
 
 @Injectable()
-export class TareasService {
+export class TareaService {
 
-    constructor(@InjectRepository(Tarea) private readonly tareasRepository: Repository<Tarea>) {
+    constructor(@InjectRepository(Tarea) private readonly tareaRepository: Repository<Tarea>) {}
 
-    }
-
-    async crearTarea(dto: CreateTareaDto, idProyecto: number): Promise<{ id: number }> {
-
-        const tarea: Tarea = this.tareasRepository.create(dto);
-
+    async crearTarea(dto: CreateTareaDto, idProyecto: number): Promise<{ id: number, nombre: string }> {
+        const tarea: Tarea = this.tareaRepository.create(dto);
         tarea.estado = EstadosTareasEnum.PENDIENTE;
         tarea.idProyecto = idProyecto;
-
-        await this.tareasRepository.save(tarea);
-
-        return { id: tarea.id };
-
+        await this.tareaRepository.save(tarea);
+        return { id: tarea.id, nombre: tarea.descripcion };
     }
 
     async actualizarTarea(dto: UpdateTareaDto, idTarea: number): Promise<void> {
-        const tarea: Tarea | null = await this.tareasRepository.findOne({ where: { id: idTarea } });
+        const tarea: Tarea | null = await this.tareaRepository.findOne({ where: { id: idTarea } });
 
         if (!tarea) {
-            throw new BadRequestException("La tarea indicada no existe");
+            throw new BadRequestException(`No existe una tarea con id ${idTarea}`);
         }
-
-        this.tareasRepository.merge(tarea, dto);
-
-        await this.tareasRepository.save(tarea);
-
+        this.tareaRepository.merge(tarea, dto);
+        await this.tareaRepository.save(tarea);
     }
-
 }

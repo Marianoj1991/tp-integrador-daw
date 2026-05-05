@@ -6,7 +6,7 @@ import { Proyecto } from "./proyecto.entity";
 @Entity({ name: "tareas" })
 export class Tarea {
 
-    @PrimaryGeneratedColumn({ name: "id" })
+    @PrimaryGeneratedColumn()
     id!: number;
 
     @Column()
@@ -21,6 +21,6 @@ export class Tarea {
     @ManyToOne(()=>Proyecto)
     @JoinColumn({name:"id_proyecto"})
     proyecto!: Proyecto
-
+    
 }
 
