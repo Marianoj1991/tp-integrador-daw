@@ -13,16 +13,17 @@ export class Tarea {
   @PrimaryGeneratedColumn({ name: 'id' })
   id!: number;
 
+  @Column({ name: 'estado', type: 'enum', enum: EstadosTareasEnum })
+  estado!: EstadosTareasEnum;
+  
   @Column()
   descripcion!: string;
 
-  @Column({ name: 'estado', type: 'enum', enum: EstadosTareasEnum })
-  estado!: EstadosTareasEnum;
-
-  @Column({ name: 'id_proyecto' })
+  @Column({ name: "id_proyecto" })
   idProyecto!: number;
 
-  @ManyToOne(() => Proyecto)
-  @JoinColumn({ name: 'id_proyecto' })
-  proyecto!: Proyecto;
+  @ManyToOne(()=>Proyecto)
+  @JoinColumn({name:"id_proyecto"})
+  proyecto!: Proyecto
+    
 }

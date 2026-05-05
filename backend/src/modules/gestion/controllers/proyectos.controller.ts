@@ -1,48 +1,48 @@
-import {
-  Body,
-  Controller,
-  Get,
-  NotImplementedException,
-  Param,
-  Post,
-  Put,
-  UseGuards,
-} from '@nestjs/common';
-import { CreateProyectoDto } from '../dtos/input/create-proyecto.dto';
-import { UpdateProyectoDto } from '../dtos/input/update-proyecto.dto';
-import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
-import { ListProyectoDTO } from '../dtos/output/list-proyecto.dto';
-import { ProyectoDTO } from '../dtos/output/proyecto.dto';
+import { Body, Controller, Get, NotImplementedException, Param, Post, Put, UseGuards } from "@nestjs/common";
+import { CreateProyectoDto } from "../dtos/input/create-proyecto.dto";
+import { UpdateProyectoDto } from "../dtos/input/update-proyecto.dto";
+import { ApiBearerAuth, ApiOkResponse } from "@nestjs/swagger";
+import { ListProyectoDTO } from "../dtos/output/list-proyecto.dto";
+import { ProyectoDTO } from "../dtos/output/proyecto.dto";
+import { AuthGuard } from "../../auth/guards/auth.guard";
+import { ProyectosService } from "../services/proyectos.service";
 
 @Controller('proyectos')
 export class ProyectosController {
-  constructor() {}
 
-  @ApiBearerAuth()
-  @Post()
-  async crearProyecto(@Body() dto: CreateProyectoDto): Promise<{ id: number }> {
-    throw new NotImplementedException();
-  }
+    constructor(private readonly proyectosService: ProyectosService) { }
 
-  @ApiBearerAuth()
-  @Put(':id')
-  async actualizarProyecto(
-    @Body() dto: UpdateProyectoDto,
-    @Param('id') id: number,
-  ): Promise<void> {
-    throw new NotImplementedException();
-  }
+    @ApiBearerAuth()
+    @UseGuards(AuthGuard)
+    @Post()
+    async crearProyecto(@Body() dto: CreateProyectoDto): Promise<{ id: number }> {
 
-  @ApiBearerAuth()
-  @ApiOkResponse({ type: ListProyectoDTO, isArray: true })
-  @Get()
-  async obtenerProyectos(): Promise<ListProyectoDTO[]> {
-    throw new NotImplementedException();
-  }
+       return await this.proyectosService.crearProyecto(dto);
 
-  @ApiBearerAuth()
-  @Get(':id')
-  async obtenerProyecto(@Param('id') id: number): Promise<ProyectoDTO> {
-    throw new NotImplementedException();
-  }
+    }
+
+    @ApiBearerAuth()
+    @UseGuards(AuthGuard)
+    @Put(':id')
+    async actualizarProyecto(@Body() dto: UpdateProyectoDto, @Param('id') id: number): Promise<void> {
+
+        return await this.proyectosService.actualizarProyecto(id, dto);
+    }
+
+    @ApiBearerAuth()
+    @ApiOkResponse({ type: ListProyectoDTO, isArray: true })
+    @UseGuards(AuthGuard)
+    @Get()
+    async obtenerProyectos(): Promise<ListProyectoDTO[]> {
+
+        return await this.proyectosService.obtenerProyectos();
+    }
+
+    @ApiBearerAuth()
+    @UseGuards(AuthGuard)
+    @Get(':id')
+    async obtenerProyecto(@Param('id') id: number): Promise<ProyectoDTO> {
+
+        return await this.proyectosService.obtenerProyecto(id);
+    }
 }

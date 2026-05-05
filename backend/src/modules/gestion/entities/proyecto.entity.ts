@@ -10,7 +10,7 @@ import { EstadosProyectosEnum } from '../enums/estados-proyectos.enum';
 import { Cliente } from './cliente.entity';
 import { Tarea } from './tarea.entity';
 
-@Entity({ name: 'proyectos' })
+@Entity({ name: "proyectos" })
 export class Proyecto {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -28,6 +28,7 @@ export class Proyecto {
   @JoinColumn({ name: 'id_cliente' })
   cliente!: Cliente;
 
-  @OneToMany(() => Tarea, (tarea) => tarea.proyecto)
+  @OneToMany(()=>Tarea, (tarea)=> tarea.proyecto)
   tareas!: Tarea[];
+
 }
