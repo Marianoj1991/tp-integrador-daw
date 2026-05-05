@@ -1,7 +1,8 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
+import { PartialType } from '@nestjs/mapped-types';
 import { IsEnum, IsOptional } from 'class-validator';
 import { CreateClienteDto } from './create-cliente.dto';
-import { EstadosClientesEnum } from 'modules/gestion/enums/estados-clientes.enum';
+import { EstadosClientesEnum } from '../../enums/estados-clientes.enum';
 
 export class UpdateClienteDto extends PartialType(CreateClienteDto) {
   @ApiProperty({
@@ -10,5 +11,5 @@ export class UpdateClienteDto extends PartialType(CreateClienteDto) {
   })
   @IsEnum(EstadosClientesEnum)
   @IsOptional()
-  estado!: EstadosClientesEnum;
+  estado?: EstadosClientesEnum;
 }

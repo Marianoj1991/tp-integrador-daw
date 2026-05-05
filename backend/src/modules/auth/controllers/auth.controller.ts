@@ -1,17 +1,15 @@
-import {
-  Body,
-  Controller,
-  NotImplementedException,
-  Post,
-} from '@nestjs/common';
-import { LoginDto } from '../dtos/input/login.dto';
+import { Body, Controller, Post } from "@nestjs/common";
+import { LoginDto } from "../dtos/input/login.dto";
+import { AuthService } from "../services/auth.service";
 
-@Controller('auth')
-export class AuthController {
-  constructor() {}
+@Controller("auth")
+export class AuthController{
 
-  @Post('')
-  async login(@Body() dto: LoginDto): Promise<{ accessToken: string }> {
-    throw new NotImplementedException();
-  }
+    constructor(private readonly authService: AuthService){}
+
+    @Post("")
+    async login(@Body() dto: LoginDto): Promise<{accessToken: string}>{
+        return await this.authService.login(dto);
+    }
+
 }
