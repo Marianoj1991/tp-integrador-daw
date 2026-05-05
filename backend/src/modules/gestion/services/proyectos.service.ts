@@ -18,19 +18,17 @@ export class ProyectosService {
         @Inject(forwardRef(() => ClientesService)) private readonly clientesService: ClientesService) { }
 
     async crearProyecto(dto: CreateProyectoDto): Promise<{ id: number }> {
-
+        
         const proyecto: Proyecto = this.repository.create(dto);
         proyecto.estado = EstadosProyectosEnum.ACTIVO;
 
         if (dto.idCliente) {
-
             const clienteActivo: boolean = await this.clientesService.existeClienteActivoPorId(dto.idCliente);
 
             if (!clienteActivo) {
                 throw new BadRequestException('Se debe especificar un cliente activo para el proyecto');
             }
         }
-
         await this.repository.save(proyecto);
         return { id: proyecto.id };
     }
