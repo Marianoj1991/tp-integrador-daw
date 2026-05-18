@@ -49,7 +49,7 @@ export class ClientesService {
             whereCondition.estado = estado
         }
 
-        const clientes: Cliente[] = await this.repository.find({ select: { id: true, nombre: true, estado: true }, order: { id: 'ASC' }, where: whereCondition });
+        const clientes: Cliente[] = await this.repository.find({ select: { id: true, nombre: true, estado: true, telefono: true, email: true  }, order: { id: 'ASC' }, where: whereCondition });
 
         const dtoList: ListClienteDTO[] = [];
 
@@ -57,6 +57,8 @@ export class ClientesService {
             const dto = new ListClienteDTO();
             dto.id = c.id;
             dto.nombre = c.nombre;
+            dto.telefono = c.telefono;
+            dto.email = c.email;
             dto.estado = c.estado;
             dtoList.push(dto);
         }
@@ -82,9 +84,9 @@ export class ClientesService {
             return s;
         };
 
-        const headers = ['id', 'nombre', 'estado'];
+        const headers = ['id', 'nombre', 'telefono', 'email', 'estado'];
 
-        const rows = clientes.map((c) => [c.id, c.nombre, c.estado]);
+        const rows = clientes.map((c) => [c.id, c.nombre, c.telefono, c.email, c.estado]);
 
         const csvLines = [headers.join(',')].concat(rows.map((r) => r.map((c) => escape(c)).join(',')));
 
