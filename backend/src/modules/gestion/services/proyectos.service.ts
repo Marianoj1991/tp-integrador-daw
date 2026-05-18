@@ -43,6 +43,43 @@ export class ProyectosService {
     return { id: proyecto.id };
   }
 
+  async exportProyectosCsv(): Promise<string> {
+    const proyectos: ListProyectoDTO[] = await this.obtenerProyectos();
+
+    const escape = (val: any) => {
+      if (val === null || val === undefined) return '';
+      const s = String(val);
+      if (s.includes('"') || s.includes(',') || s.includes('\n')) {
+        return '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    };
+
+    const headers = [
+      'id',
+      'nombre',
+      'estado',
+      'cliente_id',
+      'cliente_nombre',
+      'cliente_estado',
+    ];
+
+    const rows = proyectos.map((p) => [
+      p.id,
+      p.nombre,
+      p.estado,
+      p.cliente?.id ?? '',
+      p.cliente?.nombre ?? '',
+      p.cliente?.estado ?? '',
+    ]);
+
+    const csvLines = [headers.join(',')].concat(
+      rows.map((r) => r.map((c) => escape(c)).join(',')),
+    );
+
+    return csvLines.join('\n');
+  }
+
   async actualizarProyecto(id: number, dto: UpdateProyectoDto): Promise<void> {
     const proyecto: Proyecto | null = await this.repository.findOne({
       where: { id },

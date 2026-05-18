@@ -29,4 +29,25 @@ export class TareaService {
         this.tareaRepository.merge(tarea, dto);
         await this.tareaRepository.save(tarea);
     }
+
+    async exportTareasCsv(idProyecto: number): Promise<string> {
+        const tareas: Tarea[] = await this.tareaRepository.find({ where: { idProyecto }, order: { id: 'ASC' } });
+
+        const escape = (val: any) => {
+            if (val === null || val === undefined) return '';
+            const s = String(val);
+            if (s.includes('"') || s.includes(',') || s.includes('\n')) {
+                return '"' + s.replace(/"/g, '""') + '"';
+            }
+            return s;
+        };
+
+        const headers = ['id', 'descripcion', 'estado', 'id_proyecto'];
+
+        const rows = tareas.map((t) => [t.id, t.descripcion, t.estado, t.idProyecto]);
+
+        const csvLines = [headers.join(',')].concat(rows.map((r) => r.map((c) => escape(c)).join(',')));
+
+        return csvLines.join('\n');
+    }
 }
