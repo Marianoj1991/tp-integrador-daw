@@ -41,7 +41,7 @@ export class ClientesService {
         await this.repository.save(cliente);
     }
 
-    async obtenerClientes(estado: EstadosClientesEnum): Promise<ListClienteDTO[]> {
+    async obtenerClientes(estado?: EstadosClientesEnum): Promise<ListClienteDTO[]> {
 
         const whereCondition:  FindOptionsWhere<ListClienteDTO> = {}
 
@@ -68,6 +68,27 @@ export class ClientesService {
 
         const existe: boolean = await this.repository.exists({ where: { id, estado: EstadosClientesEnum.ACTIVO } });
         return existe;
+    }
+
+    async exportClientesCsv(estado?: EstadosClientesEnum): Promise<string> {
+        const clientes: ListClienteDTO[] = await this.obtenerClientes(estado);
+
+        const escape = (val: any) => {
+            if (val === null || val === undefined) return '';
+            const s = String(val);
+            if (s.includes('"') || s.includes(',') || s.includes('\n')) {
+                return '"' + s.replace(/"/g, '""') + '"';
+            }
+            return s;
+        };
+
+        const headers = ['id', 'nombre', 'estado'];
+
+        const rows = clientes.map((c) => [c.id, c.nombre, c.estado]);
+
+        const csvLines = [headers.join(',')].concat(rows.map((r) => r.map((c) => escape(c)).join(',')));
+
+        return csvLines.join('\n');
     }
 }
 

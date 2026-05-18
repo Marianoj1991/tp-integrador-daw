@@ -7,6 +7,7 @@ import {
   Put,
   Query,
   UseGuards,
+  Res,
 } from '@nestjs/common';
 import { CreateClienteDto } from '../dtos/input/create-cliente.dto';
 import { ApiBearerAuth, ApiOkResponse, ApiQuery } from '@nestjs/swagger';
@@ -18,6 +19,7 @@ import { ClientesService } from '../services/clientes.service';
 import { RolesGuard } from 'modules/auth/guards/roles.guard';
 import { Roles } from 'modules/auth/decorators/roles.decorator';
 import { RolEnum } from 'common/enums/rol.enum';
+import type {Response} from 'express';
 
 @Controller('clientes')
 export class ClientesController {
@@ -50,6 +52,13 @@ export class ClientesController {
     enum: EstadosClientesEnum,
   })
   @UseGuards(AuthGuard)
+  @Get('export/csv')
+  async exportCsv(@Query('estado') estado: EstadosClientesEnum, @Res() res: Response): Promise<void> {
+    const csv = await this.clientesService.exportClientesCsv(estado);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="clientes.csv"');
+    res.send(csv);
+  }
   @Get()
   async obtenerClientes(
     @Query('estado') estado: EstadosClientesEnum,

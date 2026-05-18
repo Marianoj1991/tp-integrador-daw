@@ -6,6 +6,7 @@ import {
   Post,
   Put,
   UseGuards,
+  Res,
 } from '@nestjs/common';
 import { CreateProyectoDto } from '../dtos/input/create-proyecto.dto';
 import { UpdateProyectoDto } from '../dtos/input/update-proyecto.dto';
@@ -17,6 +18,7 @@ import { ProyectosService } from '../services/proyectos.service';
 import { RolesGuard } from 'modules/auth/guards/roles.guard';
 import { RolEnum } from 'common/enums/rol.enum';
 import { Roles } from 'modules/auth/decorators/roles.decorator';
+import type {Response} from 'express';
 
 @Controller('proyectos')
 export class ProyectosController {
@@ -47,6 +49,16 @@ export class ProyectosController {
   @Get()
   async obtenerProyectos(): Promise<ListProyectoDTO[]> {
     return await this.proyectosService.obtenerProyectos();
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Get('export/csv')
+  async exportCsv(@Res() res: Response): Promise<void> {
+    const csv = await this.proyectosService.exportProyectosCsv();
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="proyectos.csv"');
+    res.send(csv);
   }
 
   @ApiBearerAuth()
