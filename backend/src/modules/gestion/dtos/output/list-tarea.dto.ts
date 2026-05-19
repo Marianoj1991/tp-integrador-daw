@@ -8,6 +8,6 @@ export class ListTareaDTO {
   @ApiProperty()
   descripcion!: string;
 
-  @ApiProperty()
+  @ApiProperty({ enum: EstadosTareasEnum })
   estado!: EstadosTareasEnum;
 }

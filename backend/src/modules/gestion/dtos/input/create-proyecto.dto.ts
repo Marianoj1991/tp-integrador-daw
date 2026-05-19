@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 
 export class CreateProyectoDto {
-  @ApiProperty({ example: 'Sitio Web Cuchillería Orix' })
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   nombre!: string;

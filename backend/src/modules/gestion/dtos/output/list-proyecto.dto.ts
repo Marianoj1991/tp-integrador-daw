@@ -9,7 +9,7 @@ export class ListProyectoDTO {
   @ApiProperty()
   nombre!: string;
 
-  @ApiProperty()
+  @ApiProperty({ enum: EstadosProyectosEnum })
   estado!: EstadosProyectosEnum;
 
   @ApiProperty()

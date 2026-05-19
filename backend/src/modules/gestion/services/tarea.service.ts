@@ -5,17 +5,26 @@ import { Tarea } from "../entities/tarea.entity";
 import { CreateTareaDto } from "../dtos/input/create-tarea.dto";
 import { EstadosTareasEnum } from "../enums/estados-tareas.enum";
 import { UpdateTareaDto } from "../dtos/input/update-tarea.dto";
+import { Meta } from "../entities/meta.entity";
 
 
 @Injectable()
 export class TareaService {
 
-    constructor(@InjectRepository(Tarea) private readonly tareaRepository: Repository<Tarea>) {}
+    constructor(
+        @InjectRepository(Tarea) private readonly tareaRepository: Repository<Tarea>,
+        @InjectRepository(Meta) private readonly metaRepository: Repository<Meta>
+    ) {}
 
-    async crearTarea(dto: CreateTareaDto, idProyecto: number): Promise<{ id: number, nombre: string }> {
+    async crearTarea(dto: CreateTareaDto): Promise<{ id: number, nombre: string }> {
+        const meta = await this.metaRepository.findOne({ where: { id: dto.idMeta } });
+        if (!meta) {
+            throw new BadRequestException(`No existe una meta con id ${dto.idMeta}`);
+        }
+
         const tarea: Tarea = this.tareaRepository.create(dto);
         tarea.estado = EstadosTareasEnum.PENDIENTE;
-        tarea.idProyecto = idProyecto;
+        tarea.idProyecto = meta.idProyecto; 
         await this.tareaRepository.save(tarea);
         return { id: tarea.id, nombre: tarea.descripcion };
     }
@@ -26,7 +35,9 @@ export class TareaService {
         if (!tarea) {
             throw new BadRequestException(`No existe una tarea con id ${idTarea}`);
         }
+
         this.tareaRepository.merge(tarea, dto);
         await this.tareaRepository.save(tarea);
     }
 }
+

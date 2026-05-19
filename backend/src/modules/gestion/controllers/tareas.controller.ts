@@ -8,7 +8,7 @@ import { RolesGuard } from 'modules/auth/guards/roles.guard';
 import { Roles } from 'modules/auth/decorators/roles.decorator';
 import { RolEnum } from 'common/enums/rol.enum';
 
-@Controller('proyectos/:idProyecto/tareas')
+@Controller('tareas')
 export class TareasController {
   constructor(private readonly tareasService: TareaService) {}
 
@@ -18,9 +18,8 @@ export class TareasController {
   @Post()
   async crearTarea(
     @Body() dto: CreateTareaDto,
-    @Param('idProyecto') idProyecto: number,
   ): Promise<{ id: number }> {
-    return await this.tareasService.crearTarea(dto, idProyecto);
+    return await this.tareasService.crearTarea(dto);
   }
 
   @ApiBearerAuth()

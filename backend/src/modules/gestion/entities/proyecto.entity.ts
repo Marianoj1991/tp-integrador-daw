@@ -9,6 +9,7 @@ import {
 import { EstadosProyectosEnum } from '../enums/estados-proyectos.enum';
 import { Cliente } from './cliente.entity';
 import { Tarea } from './tarea.entity';
+import { Meta } from './meta.entity';
 
 @Entity({ name: 'proyectos' })
 export class Proyecto {
@@ -30,4 +31,7 @@ export class Proyecto {
 
   @OneToMany(() => Tarea, (tarea) => tarea.proyecto)
   tareas!: Tarea[];
+
+  @OneToMany(() => Meta, (meta) => meta.proyecto)
+  metas!: Meta[];
 }

@@ -4,23 +4,26 @@ import { Proyecto } from '../entities/proyecto.entity';
 import { Repository, In } from 'typeorm';
 import { EstadosProyectosEnum } from '../enums/estados-proyectos.enum';
 import { UpdateProyectoDto } from '../dtos/input/update-proyecto.dto';
-import {
-  BadRequestException,
-  forwardRef,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common';
 import { ListProyectoDTO } from '../dtos/output/list-proyecto.dto';
 import { ProyectoDTO } from '../dtos/output/proyecto.dto';
 import { ListTareaDTO } from '../dtos/output/list-tarea.dto';
 import { ClientesService } from './clientes.service';
 import { ListClienteDTO } from '../dtos/output/list-cliente.dto';
+import { Meta } from '../entities/meta.entity';
+import { Tarea } from '../entities/tarea.entity';
+import { EstadosMetasEnum } from '../enums/estados-metas.enum';
+import { EstadosTareasEnum } from '../enums/estados-tareas.enum';
 
 @Injectable()
 export class ProyectosService {
   constructor(
     @InjectRepository(Proyecto)
     private readonly repository: Repository<Proyecto>,
+    @InjectRepository(Meta)
+    private readonly metaRepository: Repository<Meta>,
+    @InjectRepository(Tarea)
+    private readonly tareaRepository: Repository<Tarea>,
     @Inject(forwardRef(() => ClientesService))
     private readonly clientesService: ClientesService,
   ) {}
@@ -66,6 +69,18 @@ export class ProyectosService {
 
     this.repository.merge(proyecto, dto);
 
+    if (dto.estado === EstadosProyectosEnum.BAJA) {
+      await this.metaRepository.update(
+        { idProyecto: id },
+        { estado: EstadosMetasEnum.BAJA }
+      );
+      
+      await this.tareaRepository.update(
+        { idProyecto: id },
+        { estado: EstadosTareasEnum.BAJA }
+      );
+    }
+
     await this.repository.save(proyecto);
   }
 
@@ -97,8 +112,8 @@ export class ProyectosService {
   async obtenerProyecto(id: number): Promise<ProyectoDTO> {
     const proyecto: Proyecto | null = await this.repository.findOne({
       where: { id },
-      relations: ['cliente', 'tareas'],
-      order: { tareas: { id: 'ASC' } },
+      relations: ['cliente', 'tareas', 'metas'],
+      order: { tareas: { id: 'ASC' }, metas: { id: 'ASC' } },
     });
 
     if (!proyecto) {
@@ -122,6 +137,18 @@ export class ProyectosService {
 
     dto.tareas = tareas;
 
+    const metas: { id: number; nombre: string; estado: EstadosMetasEnum }[] = [];
+    if (proyecto.metas) {
+      for (const m of proyecto.metas) {
+        metas.push({
+          id: m.id,
+          nombre: m.nombre,
+          estado: m.estado,
+        });
+      }
+    }
+    dto.metas = metas;
+
     return dto;
   }
 
@@ -129,6 +156,18 @@ export class ProyectosService {
     const existe: boolean = await this.repository.exists({
       where: {
         cliente: { id: idCliente },
+        estado: In([
+          EstadosProyectosEnum.ACTIVO,
+          EstadosProyectosEnum.FINALIZADO,
+        ]),
+      },
+    });
+    return existe;
+  }
+  async existeProyectoActivoPorId(idProyecto: number): Promise<boolean> {
+    const existe: boolean = await this.repository.exists({
+      where: {
+        id: idProyecto,
         estado: In([
           EstadosProyectosEnum.ACTIVO,
           EstadosProyectosEnum.FINALIZADO,
