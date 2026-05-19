@@ -83,7 +83,6 @@ export class ProyectosService {
   async actualizarProyecto(id: number, dto: UpdateProyectoDto): Promise<void> {
     const proyecto: Proyecto | null = await this.repository.findOne({
       where: { id },
-      relations: ['cliente'],
     });
 
     if (!proyecto) {

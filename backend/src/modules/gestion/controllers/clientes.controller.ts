@@ -19,7 +19,7 @@ import { ClientesService } from '../services/clientes.service';
 import { RolesGuard } from 'modules/auth/guards/roles.guard';
 import { Roles } from 'modules/auth/decorators/roles.decorator';
 import { RolEnum } from 'common/enums/rol.enum';
-import type {Response} from 'express';
+import type { Response } from 'express';
 
 @Controller('clientes')
 export class ClientesController {
@@ -53,7 +53,10 @@ export class ClientesController {
   })
   @UseGuards(AuthGuard)
   @Get('export/csv')
-  async exportCsv(@Query('estado') estado: EstadosClientesEnum, @Res() res: Response): Promise<void> {
+  async exportCsv(
+    @Query('estado') estado: EstadosClientesEnum,
+    @Res() res: Response,
+  ): Promise<void> {
     const csv = await this.clientesService.exportClientesCsv(estado);
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
     res.setHeader('Content-Disposition', 'attachment; filename="clientes.csv"');

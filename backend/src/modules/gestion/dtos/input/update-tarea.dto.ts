@@ -7,10 +7,9 @@ import { EstadosTareasEnum } from '../../enums/estados-tareas.enum';
 export class UpdateTareaDto extends PartialType(CreateTareaDto) {
   @ApiProperty({
     enum: EstadosTareasEnum,
-    example: EstadosTareasEnum.PENDIENTE
+    example: EstadosTareasEnum.PENDIENTE,
   })
   @IsEnum(EstadosTareasEnum)
   @IsOptional()
   estado?: EstadosTareasEnum;
 }
-

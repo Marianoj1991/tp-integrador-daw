@@ -8,8 +8,6 @@ import { ToastModule } from 'primeng/toast';
   imports: [RouterOutlet, ToastModule],
   templateUrl: './app.html',
   styleUrl: './app.css',
-  providers: [MessageService]
+  providers: [MessageService],
 })
-export class App {
-
-}
+export class App {}

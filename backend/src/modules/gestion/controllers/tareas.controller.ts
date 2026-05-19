@@ -1,4 +1,13 @@
-import { Body, Controller, Param, Post, Put, UseGuards, Get, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+  Get,
+  Res,
+} from '@nestjs/common';
 import { UpdateTareaDto } from '../dtos/input/update-tarea.dto';
 import { CreateTareaDto } from '../dtos/input/create-tarea.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -7,7 +16,7 @@ import { AuthGuard } from '../../auth/guards/auth.guard';
 import { RolesGuard } from 'modules/auth/guards/roles.guard';
 import { Roles } from 'modules/auth/decorators/roles.decorator';
 import { RolEnum } from 'common/enums/rol.enum';
-import type {Response} from 'express';
+import type { Response } from 'express';
 
 @Controller('proyectos/:idProyecto/tareas')
 export class TareasController {
@@ -16,10 +25,16 @@ export class TareasController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get('export/csv')
-  async exportCsv(@Param('idProyecto') idProyecto: number, @Res() res: Response): Promise<void> {
+  async exportCsv(
+    @Param('idProyecto') idProyecto: number,
+    @Res() res: Response,
+  ): Promise<void> {
     const csv = await this.tareasService.exportTareasCsv(idProyecto);
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-    res.setHeader('Content-Disposition', `attachment; filename="tareas_${idProyecto}.csv"`);
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="tareas_${idProyecto}.csv"`,
+    );
     res.send(csv);
   }
 

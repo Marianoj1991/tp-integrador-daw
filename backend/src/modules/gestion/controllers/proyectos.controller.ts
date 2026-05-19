@@ -18,7 +18,7 @@ import { ProyectosService } from '../services/proyectos.service';
 import { RolesGuard } from 'modules/auth/guards/roles.guard';
 import { RolEnum } from 'common/enums/rol.enum';
 import { Roles } from 'modules/auth/decorators/roles.decorator';
-import type {Response} from 'express';
+import type { Response } from 'express';
 
 @Controller('proyectos')
 export class ProyectosController {
@@ -57,7 +57,10 @@ export class ProyectosController {
   async exportCsv(@Res() res: Response): Promise<void> {
     const csv = await this.proyectosService.exportProyectosCsv();
     res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-    res.setHeader('Content-Disposition', 'attachment; filename="proyectos.csv"');
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename="proyectos.csv"',
+    );
     res.send(csv);
   }
 
