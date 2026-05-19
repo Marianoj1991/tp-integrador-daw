@@ -11,8 +11,9 @@ import { ProyectosService } from './proyectos.service';
 export class MetasService {
   constructor(
     @InjectRepository(Meta)
-    private readonly metasRepository: Repository<Meta>, private readonly proyectosService: ProyectosService,
-    ) {}
+    private readonly metasRepository: Repository<Meta>,
+    private readonly proyectosService: ProyectosService,
+  ) {}
 
   async crearMeta(dto: CreateMetaDto): Promise<Meta> {
     const meta: Meta = this.metasRepository.create(dto);
@@ -20,7 +21,7 @@ export class MetasService {
 
     if (dto.idProyecto) {
       const proyectoActivo: boolean =
-      await this.proyectosService.existeProyectoActivoPorId(dto.idProyecto);
+        await this.proyectosService.existeProyectoActivoPorId(dto.idProyecto);
 
       if (!proyectoActivo) {
         throw new BadRequestException(
@@ -32,7 +33,9 @@ export class MetasService {
   }
 
   async actualizarMeta(dto: UpdateMetaDto, idMeta: number): Promise<void> {
-    const meta: Meta | null = await this.metasRepository.findOne({ where: { id: idMeta } });
+    const meta: Meta | null = await this.metasRepository.findOne({
+      where: { id: idMeta },
+    });
 
     if (!meta) {
       throw new BadRequestException(`No existe una meta con id ${idMeta}`);
@@ -45,9 +48,7 @@ export class MetasService {
   async obtenerMetasPorProyecto(idProyecto: number): Promise<Meta[]> {
     return await this.metasRepository.find({
       where: { idProyecto },
-      relations: ['proyecto', 'tareas'] //sql join (ademas de la tabla metas, trae tambien proyecto y tareas)
+      relations: ['proyecto', 'tareas'], //sql join (ademas de la tabla metas, trae tambien proyecto y tareas)
     });
   }
-
-} 
-
+}

@@ -18,19 +18,16 @@ export class Meta {
   @Column()
   nombre!: string;
 
-  @Column({ name: 'estado', type: 'enum', enum: EstadosMetasEnum})
+  @Column({ name: 'estado', type: 'enum', enum: EstadosMetasEnum })
   estado!: EstadosMetasEnum;
 
   @Column({ name: 'id_proyecto' })
   idProyecto!: number;
- 
+
   @ManyToOne(() => Proyecto)
   @JoinColumn({ name: 'id_proyecto' }) //llave foranea
   proyecto!: Proyecto;
 
   @OneToMany(() => Tarea, (tarea) => tarea.meta)
   tareas!: Tarea[];
-
 }
-
-

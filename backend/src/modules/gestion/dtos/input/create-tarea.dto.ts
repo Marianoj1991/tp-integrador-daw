@@ -12,4 +12,3 @@ export class CreateTareaDto {
   @IsNotEmpty()
   idMeta!: number;
 }
-

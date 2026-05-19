@@ -4,7 +4,12 @@ import { Proyecto } from '../entities/proyecto.entity';
 import { Repository, In } from 'typeorm';
 import { EstadosProyectosEnum } from '../enums/estados-proyectos.enum';
 import { UpdateProyectoDto } from '../dtos/input/update-proyecto.dto';
-import { BadRequestException, forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { ListProyectoDTO } from '../dtos/output/list-proyecto.dto';
 import { ProyectoDTO } from '../dtos/output/proyecto.dto';
 import { ListTareaDTO } from '../dtos/output/list-tarea.dto';
@@ -46,10 +51,46 @@ export class ProyectosService {
     return { id: proyecto.id };
   }
 
+  async exportProyectosCsv(): Promise<string> {
+    const proyectos: ListProyectoDTO[] = await this.obtenerProyectos();
+
+    const escape = (val: any) => {
+      if (val === null || val === undefined) return '';
+      const s = String(val);
+      if (s.includes('"') || s.includes(',') || s.includes('\n')) {
+        return '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    };
+
+    const headers = [
+      'id',
+      'nombre',
+      'estado',
+      'cliente_id',
+      'cliente_nombre',
+      'cliente_estado',
+    ];
+
+    const rows = proyectos.map((p) => [
+      p.id,
+      p.nombre,
+      p.estado,
+      p.cliente?.id ?? '',
+      p.cliente?.nombre ?? '',
+      p.cliente?.estado ?? '',
+    ]);
+
+    const csvLines = [headers.join(',')].concat(
+      rows.map((r) => r.map((c) => escape(c)).join(',')),
+    );
+
+    return csvLines.join('\n');
+  }
+
   async actualizarProyecto(id: number, dto: UpdateProyectoDto): Promise<void> {
     const proyecto: Proyecto | null = await this.repository.findOne({
       where: { id },
-      relations: ['cliente'],
     });
 
     if (!proyecto) {
@@ -72,12 +113,12 @@ export class ProyectosService {
     if (dto.estado === EstadosProyectosEnum.BAJA) {
       await this.metaRepository.update(
         { idProyecto: id },
-        { estado: EstadosMetasEnum.BAJA }
+        { estado: EstadosMetasEnum.BAJA },
       );
-      
+
       await this.tareaRepository.update(
         { idProyecto: id },
-        { estado: EstadosTareasEnum.BAJA }
+        { estado: EstadosTareasEnum.BAJA },
       );
     }
 
@@ -137,7 +178,8 @@ export class ProyectosService {
 
     dto.tareas = tareas;
 
-    const metas: { id: number; nombre: string; estado: EstadosMetasEnum }[] = [];
+    const metas: { id: number; nombre: string; estado: EstadosMetasEnum }[] =
+      [];
     if (proyecto.metas) {
       for (const m of proyecto.metas) {
         metas.push({

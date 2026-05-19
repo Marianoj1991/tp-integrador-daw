@@ -16,23 +16,21 @@ export class Tarea {
 
   @Column({ name: 'estado', type: 'enum', enum: EstadosTareasEnum })
   estado!: EstadosTareasEnum;
-  
+
   @Column()
   descripcion!: string;
 
-  @Column({ name: "id_proyecto" })
+  @Column({ name: 'id_proyecto' })
   idProyecto!: number;
 
-  @ManyToOne(()=>Proyecto)
-  @JoinColumn({name:"id_proyecto"})
-  proyecto!: Proyecto
+  @ManyToOne(() => Proyecto)
+  @JoinColumn({ name: 'id_proyecto' })
+  proyecto!: Proyecto;
 
-  @Column({ name: "id_meta", nullable: false })
+  @Column({ name: 'id_meta', nullable: false })
   idMeta!: number;
 
   @ManyToOne(() => Meta)
-  @JoinColumn({ name: "id_meta" })
+  @JoinColumn({ name: 'id_meta' })
   meta!: Meta;
 }
-
-

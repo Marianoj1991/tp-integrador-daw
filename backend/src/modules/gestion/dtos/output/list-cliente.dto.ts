@@ -10,4 +10,10 @@ export class ListClienteDTO {
 
   @ApiProperty({ enum: EstadosClientesEnum })
   estado!: EstadosClientesEnum;
+
+  @ApiProperty({ required: false })
+  telefono?: string;
+
+  @ApiProperty({ required: false })
+  email?: string;
 }

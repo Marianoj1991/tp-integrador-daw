@@ -23,9 +23,9 @@ export class ProyectoDTO {
       properties: {
         id: { type: 'number' },
         nombre: { type: 'string' },
-        estado: { type: 'string', enum: Object.values(EstadosMetasEnum) }
-      }
-    }
+        estado: { type: 'string', enum: Object.values(EstadosMetasEnum) },
+      },
+    },
   })
   metas!: { id: number; nombre: string; estado: EstadosMetasEnum }[];
 }

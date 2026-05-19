@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { MetasService } from '../services/metas.service';
 import { CreateMetaDto } from '../dtos/input/create-meta.dto';
 import { UpdateMetaDto } from '../dtos/input/update-meta.dto';
@@ -17,9 +26,7 @@ export class MetasController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(RolEnum.ADMIN)
   @Post()
-  async crearMeta(
-    @Body() createMetaDto: CreateMetaDto
-  ): Promise<Meta> {
+  async crearMeta(@Body() createMetaDto: CreateMetaDto): Promise<Meta> {
     return await this.metasService.crearMeta(createMetaDto);
   }
 
@@ -27,7 +34,7 @@ export class MetasController {
   @UseGuards(AuthGuard)
   @Get('proyecto/:idProyecto')
   async obtenerMetasPorProyecto(
-    @Param('idProyecto', ParseIntPipe) idProyecto: number
+    @Param('idProyecto', ParseIntPipe) idProyecto: number,
   ): Promise<Meta[]> {
     return await this.metasService.obtenerMetasPorProyecto(idProyecto);
   }
@@ -42,5 +49,4 @@ export class MetasController {
   ): Promise<void> {
     return await this.metasService.actualizarMeta(updateMetaDto, id);
   }
-
 }

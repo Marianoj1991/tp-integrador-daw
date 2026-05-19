@@ -13,5 +13,5 @@ export class ListMetaDTO {
   estado!: EstadosMetasEnum;
 
   @ApiProperty()
-  proyecto!: ListProyectoDTO; 
+  proyecto!: ListProyectoDTO;
 }
