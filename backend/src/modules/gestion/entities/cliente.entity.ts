@@ -15,4 +15,10 @@ export class Cliente {
 
   @OneToMany(() => Proyecto, (proyecto) => proyecto.cliente)
   proyectos!: Proyecto[];
+
+  @Column({ nullable: true })
+  telefono?: string;
+
+  @Column({ nullable: true })
+  email?: string;
 }
