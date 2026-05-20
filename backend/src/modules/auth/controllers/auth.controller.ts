@@ -6,6 +6,7 @@ import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
 import { RolEnum } from 'common/enums/rol.enum';
 import { CreateUsuarioDto } from '../dtos/input/register.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -16,10 +17,13 @@ export class AuthController {
     return await this.authService.login(dto);
   }
 
-  @Post()
+  @ApiBearerAuth()
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(RolEnum.ADMIN)
-  register(@Body() createUsuarioDto: CreateUsuarioDto) {
+  @Post('register')
+  register(
+    @Body() createUsuarioDto: CreateUsuarioDto,
+  ): Promise<{ accessToken: string }> {
     return this.authService.register(createUsuarioDto);
   }
 }

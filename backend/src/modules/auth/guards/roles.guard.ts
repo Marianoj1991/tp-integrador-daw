@@ -13,21 +13,19 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    // 1. Obtenemos los roles requeridos desde el decorador @Roles
     const requiredRoles = this.reflector.getAllAndOverride<RolEnum[]>(
       ROLES_KEY,
       [context.getHandler(), context.getClass()],
     );
 
-    // 2. Si la ruta no tiene el decorador @Roles, se permite el acceso
+    console.log(requiredRoles);
+
     if (!requiredRoles) {
       return true;
     }
 
-    // 3. Obtenemos al usuario que el AuthGuard pegó en la request
     const { usuario } = context.switchToHttp().getRequest();
 
-    // 4. Verificamos si el usuario tiene el rol necesario
     const tieneRol = requiredRoles.some((rol) => usuario.rol === rol);
 
     if (!tieneRol) {
