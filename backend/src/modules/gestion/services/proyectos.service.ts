@@ -173,6 +173,7 @@ export class ProyectosService {
       tareaDto.id = t.id;
       tareaDto.descripcion = t.descripcion;
       tareaDto.estado = t.estado;
+      tareaDto.idMeta = t.idMeta;
       tareas.push(tareaDto);
     }
 

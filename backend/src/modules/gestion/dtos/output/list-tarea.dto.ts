@@ -10,4 +10,7 @@ export class ListTareaDTO {
 
   @ApiProperty({ enum: EstadosTareasEnum })
   estado!: EstadosTareasEnum;
+
+  @ApiProperty()
+  idMeta!: number; 
 }

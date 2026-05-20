@@ -7,6 +7,7 @@ import {
   UseGuards,
   Get,
   Res,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UpdateTareaDto } from '../dtos/input/update-tarea.dto';
 import { CreateTareaDto } from '../dtos/input/create-tarea.dto';

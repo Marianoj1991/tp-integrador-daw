@@ -16,7 +16,10 @@ export class CreateClienteDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  @Matches(/^\+?\d{7,15}$/)
+  @Matches(/^\+?[\d\s\-\(\)]{7,20}$/,{
+    message:
+      'El teléfono solo puede contener números, espacios, guiones y paréntesis',
+  })
   telefono?: string;
 
   @ApiProperty({ required: false })
