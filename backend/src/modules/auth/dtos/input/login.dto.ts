@@ -11,5 +11,4 @@ export class LoginDto {
   @IsString()
   @IsNotEmpty()
   clave!: string;
-
 }

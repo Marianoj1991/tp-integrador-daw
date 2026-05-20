@@ -60,4 +60,4 @@ ADD COLUMN rol "rol_enum" NOT NULL DEFAULT 'user';
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-insert into usuarios (nombre, clave, estado, rol) values ('usuario', crypt('clave', gen_salt('bf', 10)), 'ACTIVO', 'admin');
+insert into usuarios (nombre, clave, estado, rol) values ('usuario', crypt('clave', gen_salt('bf', 10)), 'ACTIVO', 'admin');

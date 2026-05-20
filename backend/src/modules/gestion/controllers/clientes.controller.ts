@@ -62,6 +62,7 @@ export class ClientesController {
     res.setHeader('Content-Disposition', 'attachment; filename="clientes.csv"');
     res.send(csv);
   }
+
   @Get()
   async obtenerClientes(
     @Query('estado') estado: EstadosClientesEnum,
