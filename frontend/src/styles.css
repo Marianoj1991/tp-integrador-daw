@@ -18,7 +18,8 @@
 
 body {
   margin: 0;
-  background-color: lightyellow;
+  background-color: var(--bg-principal);
+  font-family: 'Inter', sans-serif;
 }
 
 .pdialog {
