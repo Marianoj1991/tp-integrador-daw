@@ -1,8 +1,24 @@
 @import 'primeicons/primeicons.css';
 
+:root {
+  /* Fondos */
+  --bg-principal: #090d16;
+  --bg-superficie: #111827;
+  --border-color: #1f2937;
+
+  /* Textos */
+  --text-primary: #f9fafb; /* Blanco roto (títulos) */
+  --text-secondary: #9ca3af; /* Gris claro (párrafos, placeholders) */
+
+  /* Marca y Acciones */
+  --color-primario: #3b82f6;
+  --color-primario-hover: #2563eb;
+}
+
 body {
   margin: 0;
-  background-color: lightyellow;
+  background-color: #090d16;
+  font-family: 'Inter', sans-serif;
 }
 
 .pdialog {
