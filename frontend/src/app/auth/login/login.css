@@ -1,4 +1,5 @@
 :host {
+<<<<<<< HEAD
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,3 +30,97 @@
 #header {
   text-align: center;
 }
+=======
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: auto;
+    padding: 3rem 2rem;
+    max-width: 24rem;
+    width: 90%;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#nombre {
+    margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+#clave {
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+#header {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 2rem;
+    margin-top: 0;
+}
+
+::ng-deep .p-inputtext {
+    width: 100% !important;
+    border-radius: 8px !important;
+    border: 2px solid #e0e0e0 !important;
+    padding: 0.75rem 1rem !important;
+    font-size: 1rem !important;
+}
+
+::ng-deep .p-inputtext:focus {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 0.3rem rgba(102, 126, 234, 0.1) !important;
+}
+
+::ng-deep .p-password {
+    width: 100% !important;
+}
+
+::ng-deep .p-password .p-inputtext {
+    width: 100% !important;
+}
+
+::ng-deep .p-button {
+    width: 100% !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    padding: 0.75rem !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    transition: all 0.3s ease !important;
+}
+
+::ng-deep .p-button:hover {
+    background: linear-gradient(135deg, #5568d3 0%, #663a91 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4) !important;
+}
+>>>>>>> a54fec8ad0ceee7f72671e716505cd13e7f940b2
