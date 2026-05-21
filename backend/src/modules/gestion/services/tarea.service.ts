@@ -6,6 +6,7 @@ import { CreateTareaDto } from '../dtos/input/create-tarea.dto';
 import { EstadosTareasEnum } from '../enums/estados-tareas.enum';
 import { UpdateTareaDto } from '../dtos/input/update-tarea.dto';
 import { Meta } from '../entities/meta.entity';
+import { Proyecto } from '../entities/proyecto.entity';
 
 @Injectable()
 export class TareaService {
@@ -13,21 +14,44 @@ export class TareaService {
     @InjectRepository(Tarea)
     private readonly tareaRepository: Repository<Tarea>,
     @InjectRepository(Meta) private readonly metaRepository: Repository<Meta>,
+    @InjectRepository(Proyecto) private readonly proyectoRepository: Repository<Proyecto>,
   ) {}
 
   async crearTarea(
     dto: CreateTareaDto,
+    idProyecto: number,
   ): Promise<{ id: number; nombre: string }> {
-    const meta = await this.metaRepository.findOne({
-      where: { id: dto.idMeta },
-    });
-    if (!meta) {
-      throw new BadRequestException(`No existe una meta con id ${dto.idMeta}`);
+    let idMeta = dto.idMeta;
+    let meta: Meta | null = null;
+
+    // Si se proporciona idMeta, validar que existe
+    if (idMeta) {
+      meta = await this.metaRepository.findOne({
+        where: { id: idMeta },
+      });
+      if (!meta) {
+        throw new BadRequestException(`No existe una meta con id ${idMeta}`);
+      }
+    } else {
+      // Si no se proporciona, obtener la primera meta del proyecto
+      meta = await this.metaRepository.findOne({
+        where: { idProyecto },
+        order: { id: 'ASC' },
+      });
+      if (!meta) {
+        throw new BadRequestException(
+          `El proyecto ${idProyecto} no tiene metas asociadas`,
+        );
+      }
+      idMeta = meta.id;
     }
 
-    const tarea: Tarea = this.tareaRepository.create(dto);
+    const tarea: Tarea = this.tareaRepository.create({
+      ...dto,
+      idMeta,
+    });
     tarea.estado = EstadosTareasEnum.PENDIENTE;
-    tarea.idProyecto = meta.idProyecto;
+    tarea.idProyecto = idProyecto;
     await this.tareaRepository.save(tarea);
     return { id: tarea.id, nombre: tarea.descripcion };
   }

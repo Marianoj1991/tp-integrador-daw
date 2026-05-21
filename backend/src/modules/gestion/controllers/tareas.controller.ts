@@ -19,7 +19,7 @@ import { Roles } from 'modules/auth/decorators/roles.decorator';
 import { RolEnum } from 'common/enums/rol.enum';
 import type { Response } from 'express';
 
-@Controller('tareas')
+@Controller('proyectos/:idProyecto/tareas')
 export class TareasController {
   constructor(private readonly tareasService: TareaService) {}
 
@@ -27,7 +27,7 @@ export class TareasController {
   @UseGuards(AuthGuard)
   @Get('export/csv')
   async exportCsv(
-    @Param('idProyecto') idProyecto: number,
+    @Param('idProyecto', ParseIntPipe) idProyecto: number,
     @Res() res: Response,
   ): Promise<void> {
     const csv = await this.tareasService.exportTareasCsv(idProyecto);
@@ -43,8 +43,11 @@ export class TareasController {
   @UseGuards(AuthGuard, RolesGuard)
   @Roles(RolEnum.ADMIN)
   @Post()
-  async crearTarea(@Body() dto: CreateTareaDto): Promise<{ id: number }> {
-    return await this.tareasService.crearTarea(dto);
+  async crearTarea(
+    @Param('idProyecto', ParseIntPipe) idProyecto: number,
+    @Body() dto: CreateTareaDto,
+  ): Promise<{ id: number }> {
+    return await this.tareasService.crearTarea(dto, idProyecto);
   }
 
   @ApiBearerAuth()
@@ -52,8 +55,9 @@ export class TareasController {
   @Roles(RolEnum.ADMIN)
   @Put(':id')
   async actualizarTarea(
+    @Param('idProyecto', ParseIntPipe) idProyecto: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateTareaDto,
-    @Param('id') id: number,
   ): Promise<void> {
     await this.tareasService.actualizarTarea(dto, id);
   }
