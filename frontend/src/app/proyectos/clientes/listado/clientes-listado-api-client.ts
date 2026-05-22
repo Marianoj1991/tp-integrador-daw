@@ -19,4 +19,12 @@ export class ClientesListadoApiClient {
 
     return this.httpClient.get<ListClienteDTO[]>(path);
   }
+
+  exportarCsv(estado?: EstadosClientesEnum): Observable<Blob> {
+    let path: string = '/api/v1/clientes/export/csv';
+    if (estado) {
+      path += '?estado=' + estado;
+    }
+    return this.httpClient.get(path, { responseType: 'blob' }) as Observable<Blob>;
+  }
 }

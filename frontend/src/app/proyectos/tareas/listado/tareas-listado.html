@@ -14,6 +14,9 @@
         </div>
     </section>
     <p-button id="boton-crear-tarea" icon="pi pi-plus" label="Crear Tarea" (click)="crearTarea()"></p-button>
+    <span style="margin-left: .5rem; display: inline-block">
+        <p-button id="boton-exportar-csv" icon="pi pi-download" label="Exportar CSV" (click)="exportarCsv()"></p-button>
+    </span>
     <p-table id="tabla" [value]="tareas()" [tableStyle]="{ 'min-width': '50rem' }" [scrollable]="true"
         scrollHeight="50vh">
         <ng-template #header>

@@ -1,5 +1,8 @@
 <p-dialog header="Clientes" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }">
     <p-button id="boton-crear-cliente" icon="pi pi-plus" label="Crear Cliente" (click)="crearCliente()"></p-button>
+    <span style="margin-left: .5rem; display: inline-block">
+        <p-button id="boton-exportar-clientes" icon="pi pi-download" label="Exportar CSV" (click)="exportarCsv()"></p-button>
+    </span>
     <p-table id="tabla" [value]="clientes()" [scrollable]="true"
         scrollHeight="70vh">
         <ng-template #header>

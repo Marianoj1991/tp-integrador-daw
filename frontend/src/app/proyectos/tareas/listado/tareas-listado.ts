@@ -6,6 +6,7 @@ import { ButtonModule } from "primeng/button";
 import { Template } from "../../../template/template";
 import { TooltipModule } from 'primeng/tooltip';
 import { GestionTarea } from "../gestion/gestion-tarea";
+import { GestionTareaApiClient } from "../gestion/gestion-tarea-api-client";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProyectoApiClient } from "./proyecto-api-client";
 import { ProyectoDTO } from "./proyecto-dto";
@@ -21,6 +22,7 @@ export class TareasListado implements OnInit {
   private readonly messageService: MessageService = inject(MessageService);
 
   private readonly proyectoApiClient: ProyectoApiClient = inject(ProyectoApiClient);
+  private readonly gestionTareaApiClient: GestionTareaApiClient = inject(GestionTareaApiClient);
 
   proyecto: WritableSignal<ProyectoDTO | null> = signal(null);
 
@@ -79,6 +81,29 @@ export class TareasListado implements OnInit {
 
   abrirDialog(): void {
     this.dialogVisible.set(true);
+  }
+
+  exportarCsv(): void {
+    const id = this.idProyecto();
+    if (!id) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Id de proyecto no válido' });
+      return;
+    }
+    this.gestionTareaApiClient.exportarCsv(id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob as Blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `tareas_${id}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al exportar CSV' });
+      }
+    });
   }
 
 }

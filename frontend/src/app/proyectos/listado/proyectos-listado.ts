@@ -19,6 +19,8 @@ export class ProyectosListado implements OnInit {
 
   private readonly proyectosListadoApiClient: ProyectosListadoApiClient =
     inject(ProyectosListadoApiClient);
+  private readonly proyectosListadoApiClient2: ProyectosListadoApiClient =
+    inject(ProyectosListadoApiClient);
 
   proyectos: WritableSignal<ListProyectoDTO[]> = signal([]);
 
@@ -66,5 +68,23 @@ export class ProyectosListado implements OnInit {
 
   gestionarTareas(proyecto: ListProyectoDTO): void {
     window.open(`/proyectos/${proyecto.id}/tareas`, '_blank');
+  }
+
+  exportarCsv(): void {
+    this.proyectosListadoApiClient2.exportarCsv().subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob as Blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `proyectos.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al exportar CSV' });
+      }
+    });
   }
 }

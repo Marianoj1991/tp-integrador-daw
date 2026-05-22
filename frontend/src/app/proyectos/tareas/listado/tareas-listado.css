@@ -1,14 +1,10 @@
 #tabla{
     margin-top: 1rem;
-}   
+}
 
 .resumen{
     font-size: 1.3rem;
-<<<<<<< HEAD
     background-color: azure;
-=======
-    background-color: rgb(63, 5, 97);
->>>>>>> a54fec8ad0ceee7f72671e716505cd13e7f940b2
     border-radius: 15px;
     width: fit-content;
     height: 8vh;
@@ -23,11 +19,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 2rem;
-<<<<<<< HEAD
     background-color: lightgoldenrodyellow;
-=======
-    background-color: rgb(37, 2, 66);
->>>>>>> a54fec8ad0ceee7f72671e716505cd13e7f940b2
     border-radius: 15px;
     padding: 1rem;
     margin-bottom: 1rem;

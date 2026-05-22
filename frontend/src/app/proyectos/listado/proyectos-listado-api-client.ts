@@ -14,4 +14,8 @@ export class ProyectosListadoApiClient {
         return this.httpClient.get<ListProyectoDTO[]>('/api/v1/proyectos');
     }
 
+    exportarCsv(): Observable<Blob> {
+      return this.httpClient.get('/api/v1/proyectos/export/csv', { responseType: 'blob' }) as Observable<Blob>;
+    }
+
 }

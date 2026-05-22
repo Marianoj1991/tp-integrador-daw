@@ -5,6 +5,9 @@
     label="Crear Proyecto"
     (click)="crearProyecto()"
   ></p-button>
+  <span style="margin-left: .5rem; display: inline-block">
+    <p-button id="boton-exportar-proyectos" icon="pi pi-download" label="Exportar CSV" (click)="exportarCsv()"></p-button>
+  </span>
   <p-table
     id="tabla"
     [value]="proyectos()"

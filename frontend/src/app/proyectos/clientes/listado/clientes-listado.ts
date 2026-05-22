@@ -20,6 +20,24 @@ export class ClientesListado implements OnInit {
   visible: ModelSignal<boolean> = model(false);
 
   private readonly clientesListadoApiClient: ClientesListadoApiClient = inject(ClientesListadoApiClient);
+  
+  exportarCsv(estado?: any): void {
+    this.clientesListadoApiClient.exportarCsv(estado).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob as Blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `clientes.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al exportar CSV' });
+      }
+    });
+  }
 
   clientes: WritableSignal<ListClienteDTO[]> = signal([]);
 
