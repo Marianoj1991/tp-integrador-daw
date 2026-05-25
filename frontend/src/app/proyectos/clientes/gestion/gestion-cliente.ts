@@ -40,6 +40,8 @@ export class GestionCliente {
 
     readonly form: FormGroup = new FormGroup({
         nombre: new FormControl("", [Validators.required]),
+        telefono: new FormControl("", [Validators.pattern(/^[0-9\s\-()+]*$/)]),
+        email: new FormControl("", [Validators.email]),
         estado: new FormControl(null)
     });
 
@@ -48,12 +50,16 @@ export class GestionCliente {
             if (this.clienteSeleccionado()) {
                 this.form.patchValue({
                     nombre: this.clienteSeleccionado()?.nombre,
+                    telefono: this.clienteSeleccionado()?.telefono,
+                    email: this.clienteSeleccionado()?.email,
                     estado: this.clienteSeleccionado()?.estado
                 });
             }
             else {
                 this.form.reset({
                     nombre: "",
+                    telefono: "",
+                    email: "",
                     estado: null
                 });
             }
@@ -81,6 +87,8 @@ export class GestionCliente {
         if (this.clienteSeleccionado()) {
             const dto: UpdateClienteDto = {
                 nombre: formRawValue.nombre,
+                telefono: formRawValue.telefono,
+                email: formRawValue.email,
                 estado: formRawValue.estado
             };
             this.gestionClienteApiClient.actualizarCliente(this.clienteSeleccionado()?.id!, dto).subscribe({
@@ -101,7 +109,9 @@ export class GestionCliente {
             });
         } else {
             const dto: CreateClienteDTO = {
-                nombre: formRawValue.nombre
+                nombre: formRawValue.nombre,
+                telefono: formRawValue.telefono,
+                email: formRawValue.email
             };
             this.gestionClienteApiClient.crearCliente(dto).subscribe({
                 next: () => {

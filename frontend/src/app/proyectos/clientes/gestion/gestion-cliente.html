@@ -3,8 +3,11 @@
 
     <form [formGroup]="form">
         <div id="contenedor-formulario">
-
-            <input pInputText type="text" id="nombre" placeholder="Nombre" formControlName="nombre" />
+            <div class="formulario-cliente">
+                <input pInputText type="text" id="nombre" placeholder="Nombre" formControlName="nombre" />
+                <input pInputText type="text" id="telefono" placeholder="Telefono" formControlName="telefono" />
+                <input pInputText type="text" id="email" placeholder="Email" formControlName="email" />
+            </div>
 
             @if (clienteSeleccionado()) {
             <p-select id="estado" formControlName="estado" [options]="estados()" placeholder="Estado" appendTo="body" />
