@@ -7,15 +7,15 @@ export function authInterceptor(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
-  const authToken = inject(AuthStore).obtenerToken();
+  const authToken = inject(AuthStore).obtenerToken(); 
 
   if (!authToken) {
-    return next(req);
+    return next(req); 
   }
 
   const reqWithToken = req.clone({
-    headers: req.headers.set('Authorization', `Bearer ${authToken}`),
+    headers: req.headers.set('Authorization', `Bearer ${authToken}`), 
   });
 
-  return next(reqWithToken);
+  return next(reqWithToken); 
 }

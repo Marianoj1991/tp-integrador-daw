@@ -1,0 +1,28 @@
+<p-dialog header="Metas del Proyecto" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }">
+    <p-button id="boton-crear-meta" icon="pi pi-plus" label="Crear Meta" (click)="crearMeta()" [disabled]="proyectoEstado() === 'BAJA'"></p-button>
+
+    <p-table id="tabla" [value]="metas()" [scrollable]="true" scrollHeight="50vh">
+        <ng-template #header>
+            <tr>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-meta>
+            <tr>
+                <td>{{ meta.nombre }}</td>
+                <td>{{ meta.estado }}</td>
+                <td>
+                    <p-button icon="pi pi-pencil" pTooltip="Editar Meta" (click)="editarMeta(meta)" [disabled]="proyectoEstado() === 'BAJA'"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="3">No se encontraron metas para este proyecto.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+<app-gestion-meta [(visible)]="dialogVisible" [idProyecto]="idProyecto()" [(metaSeleccionada)]="metaSeleccionada"></app-gestion-meta>

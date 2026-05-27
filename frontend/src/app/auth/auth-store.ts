@@ -5,18 +5,18 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthStore {
-  private readonly router: Router = inject(Router);
+  private readonly router: Router = inject(Router); 
 
   guardarToken(token: string): void {
-    sessionStorage.setItem('accessToken', token);
+    sessionStorage.setItem('accessToken', token); 
   }
 
   obtenerToken(): string | null {
-    return sessionStorage.getItem('accessToken');
+    return sessionStorage.getItem('accessToken'); 
   }
 
   cerrarSesion(): void {
-    sessionStorage.removeItem('accessToken');
-    this.router.navigateByUrl('/login');
+    sessionStorage.removeItem('accessToken'); 
+    this.router.navigateByUrl('/login'); 
   }
 }

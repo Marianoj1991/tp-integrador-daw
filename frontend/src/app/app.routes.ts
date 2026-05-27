@@ -6,23 +6,23 @@ import { EstadisticasComponent } from './estadisticas/estadisticas';
 
 export const routes: Routes = [
   {
-    path: 'login',
+    path: 'login', 
     component: Login,
   },
   {
-    path: 'proyectos/:id/tareas',
+    path: 'proyectos/:id/tareas', 
     component: TareasListado,
   },
   {
-    path: 'proyectos',
-    component: ProyectosListado,
+    path: 'proyectos', 
+    component: ProyectosListado, 
   },
   {
-    path: 'estadisticas',
+    path: 'estadisticas', 
     component: EstadisticasComponent,
   },
   {
-    path: '**',
+    path: '**', 
     redirectTo: 'login',
   },
 ];

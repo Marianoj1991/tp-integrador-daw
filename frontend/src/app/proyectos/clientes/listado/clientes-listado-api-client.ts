@@ -7,6 +7,7 @@ import { EstadosClientesEnum } from '../estados-clientes-enum';
 @Injectable({
   providedIn: 'root',
 })
+
 export class ClientesListadoApiClient {
   private readonly httpClient = inject(HttpClient);
 

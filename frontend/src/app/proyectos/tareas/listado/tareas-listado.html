@@ -13,7 +13,10 @@
             <span style="font-weight: bold;">Estado: </span> {{ proyecto()?.estado }}
         </div>
     </section>
-    <p-button id="boton-crear-tarea" icon="pi pi-plus" label="Crear Tarea" (click)="crearTarea()"></p-button>
+    <p-button id="boton-crear-tarea" icon="pi pi-plus" label="Crear Tarea" (click)="crearTarea()" [disabled]="proyecto()?.estado === 'BAJA'"></p-button>
+    <span style="margin-left: .5rem; display: inline-block">
+        <p-button id="boton-gestionar-metas" icon="pi pi-bookmark" label="Gestionar Metas" (click)="gestionarMetas()"></p-button>
+    </span>
     <span style="margin-left: .5rem; display: inline-block">
         <p-button id="boton-exportar-csv" icon="pi pi-download" label="Exportar CSV" (click)="exportarCsv()"></p-button>
     </span>
@@ -22,6 +25,7 @@
         <ng-template #header>
             <tr>
                 <th>Nombre</th>
+                <th>Meta</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -29,9 +33,10 @@
         <ng-template #body let-tarea>
             <tr>
                 <td>{{ tarea.descripcion }}</td>
+                <td>{{ obtenerNombreMeta(tarea.idMeta) }}</td>
                 <td>{{ tarea.estado }}</td>
                 <td>
-                    <p-button icon="pi pi-pencil" pTooltip="Editar Tarea" (click)="editarTarea(tarea)"></p-button>
+                    <p-button icon="pi pi-pencil" pTooltip="Editar Tarea" (click)="editarTarea(tarea)" [disabled]="!puedeEditarTarea(tarea.idMeta)"></p-button>
                 </td>
             </tr>
         </ng-template>
@@ -42,5 +47,6 @@
         </ng-template>
     </p-table>
 </app-template>
-<app-gestion-tarea [(visible)]="dialogVisible" [idProyecto]="idProyecto()"
+<app-gestion-tarea [(visible)]="dialogVisible" [idProyecto]="idProyecto()" [metas]="proyecto()?.metas ?? null"
     [(tareaSeleccionada)]="tareaSeleccionada"></app-gestion-tarea>
+<app-metas-listado [(visible)]="dialogMetasVisible" [idProyecto]="idProyecto()" [proyectoEstado]="proyecto()?.estado ?? null"></app-metas-listado>

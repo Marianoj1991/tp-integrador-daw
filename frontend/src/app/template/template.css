@@ -12,6 +12,12 @@
 
 #nombre-de-proyecto {
   font-size: 1rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+}
+
+#nombre-de-proyecto:hover {
+  opacity: 0.85;
 }
 
 #content {

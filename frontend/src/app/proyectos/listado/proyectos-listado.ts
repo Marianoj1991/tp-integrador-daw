@@ -15,17 +15,17 @@ import { EstadisticasComponent } from '../../estadisticas/estadisticas';
   styleUrls: ['./proyectos-listado.css'],
   imports: [TableModule, ButtonModule, Template, TooltipModule, GestionProyecto, EstadisticasComponent],
 })
-export class ProyectosListado implements OnInit {
-  private readonly messageService: MessageService = inject(MessageService);
+export class ProyectosListado implements OnInit { 
+  private readonly messageService: MessageService = inject(MessageService); 
 
   private readonly proyectosListadoApiClient: ProyectosListadoApiClient =
-    inject(ProyectosListadoApiClient);
+    inject(ProyectosListadoApiClient); 
   private readonly proyectosListadoApiClient2: ProyectosListadoApiClient =
-    inject(ProyectosListadoApiClient);
+    inject(ProyectosListadoApiClient); 
 
-  proyectos: WritableSignal<ListProyectoDTO[]> = signal([]);
+  proyectos: WritableSignal<ListProyectoDTO[]> = signal([]); 
 
-  dialogVisible: WritableSignal<boolean> = signal(false);
+  dialogVisible: WritableSignal<boolean> = signal(false); 
 
   estadisticasVisible: WritableSignal<boolean> = signal(false)
 
@@ -33,24 +33,24 @@ export class ProyectosListado implements OnInit {
     null,
   );
 
-  constructor() {
-    effect(() => {
-      if (!this.dialogVisible()) {
-        this.refrescarProyectos();
+  constructor() { 
+    effect(() => { 
+      if (!this.dialogVisible()) { 
+        this.refrescarProyectos(); 
       }
     });
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
     this.refrescarProyectos();
   }
 
-  refrescarProyectos(): void {
-    this.proyectosListadoApiClient.buscarProyectos().subscribe({
-      next: (data) => {
+  refrescarProyectos(): void { 
+    this.proyectosListadoApiClient.buscarProyectos().subscribe({ 
+      next: (data) => { 
         this.proyectos.set(data);
       },
-      error: (error) => {
+      error: (error) => { 
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -60,8 +60,8 @@ export class ProyectosListado implements OnInit {
     });
   }
 
-  crearProyecto(): void {
-    this.dialogVisible.set(true);
+  crearProyecto(): void { 
+    this.dialogVisible.set(true); 
   }
 
   abrirEstadisticas(): void{
@@ -73,11 +73,11 @@ export class ProyectosListado implements OnInit {
     this.proyectoSeleccionado.set(proyecto);
   }
 
-  gestionarTareas(proyecto: ListProyectoDTO): void {
-    window.open(`/proyectos/${proyecto.id}/tareas`, '_blank');
+  gestionarTareas(proyecto: ListProyectoDTO): void { 
+    window.open(`/proyectos/${proyecto.id}/tareas`, '_blank'); 
   }
 
-  exportarCsv(): void {
+  exportarCsv(): void { 
     this.proyectosListadoApiClient2.exportarCsv().subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob as Blob);

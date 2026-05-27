@@ -13,14 +13,15 @@ import { GestionCliente } from "../gestion/gestion-cliente";
   styleUrls: ["./clientes-listado.css"],
   imports: [TableModule, ButtonModule, DialogModule, GestionCliente]
 })
+
 export class ClientesListado implements OnInit {
-
+  
   private readonly messageService: MessageService = inject(MessageService);
-
+  
   visible: ModelSignal<boolean> = model(false);
 
   private readonly clientesListadoApiClient: ClientesListadoApiClient = inject(ClientesListadoApiClient);
-  
+
   exportarCsv(estado?: any): void {
     this.clientesListadoApiClient.exportarCsv(estado).subscribe({
       next: (blob) => {
@@ -40,12 +41,13 @@ export class ClientesListado implements OnInit {
   }
 
   clientes: WritableSignal<ListClienteDTO[]> = signal([]);
-
+  
   dialogVisible: WritableSignal<boolean> = signal(false);
-
+  
   clienteSeleccionado: WritableSignal<ListClienteDTO | null> = signal<ListClienteDTO | null>(null);
 
   constructor() {
+    
     effect(() => {
       if (!this.dialogVisible()) {
         this.refrescarClientes();
@@ -56,7 +58,7 @@ export class ClientesListado implements OnInit {
   ngOnInit(): void {
     this.refrescarClientes();
   }
-
+  
   refrescarClientes(): void {
     this.clientesListadoApiClient.buscarClientes().subscribe({
       next: (data) => {
@@ -67,11 +69,11 @@ export class ClientesListado implements OnInit {
       }
     });
   }
-
+  
   crearCliente(): void {
     this.dialogVisible.set(true);
   }
-
+  
   editarCliente(cliente: ListClienteDTO): void {
     this.dialogVisible.set(true);
     this.clienteSeleccionado.set(cliente);

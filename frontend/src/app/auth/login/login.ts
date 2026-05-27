@@ -15,21 +15,21 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   imports: [ButtonModule, InputTextModule, PasswordModule, ReactiveFormsModule],
 })
 export class Login {
-  private readonly loginApiClient: LoginApiClient = inject(LoginApiClient);
+  private readonly loginApiClient: LoginApiClient = inject(LoginApiClient); 
 
-  private readonly messageService: MessageService = inject(MessageService);
+  private readonly messageService: MessageService = inject(MessageService); 
 
-  private readonly authStore: AuthStore = inject(AuthStore);
+  private readonly authStore: AuthStore = inject(AuthStore); 
 
-  private readonly router: Router = inject(Router);
+  private readonly router: Router = inject(Router); 
 
-  readonly form: FormGroup = new FormGroup({
+  readonly form: FormGroup = new FormGroup({ 
     nombre: new FormControl('', [Validators.required]),
     clave: new FormControl('', [Validators.required]),
   });
 
-  iniciarSesion() {
-    if (!this.form.valid) {
+  iniciarSesion() { 
+    if (!this.form.valid) { 
       this.messageService.add({
         severity: 'error',
         summary: 'Los campos del formulario son requeridos',
@@ -37,17 +37,17 @@ export class Login {
       return;
     }
 
-    const nombre: string = this.form.value.nombre;
+    const nombre: string = this.form.value.nombre; 
 
-    const clave: string = this.form.value.clave;
+    const clave: string = this.form.value.clave; 
 
-    this.loginApiClient.iniciarSesion(nombre, clave).subscribe({
-      next: (data) => {
-        this.authStore.guardarToken(data.accessToken);
-        this.router.navigateByUrl('/proyectos');
+    this.loginApiClient.iniciarSesion(nombre, clave).subscribe({ 
+      next: (data) => { 
+        this.authStore.guardarToken(data.accessToken); 
+        this.router.navigateByUrl('/proyectos'); 
       },
-      error: (err) => {
-        this.messageService.add({
+      error: (err) => { 
+        this.messageService.add({ 
           severity: 'error',
           summary: 'Ha ocurrido un error al iniciar sesión',
         });

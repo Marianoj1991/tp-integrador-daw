@@ -1,3 +1,4 @@
+
 <app-template>
   <p-button id="boton-crear-proyecto" icon="pi pi-plus" label="Crear Proyecto" (click)="crearProyecto()"></p-button>
 
@@ -21,7 +22,8 @@
         <th>Acciones</th>
       </tr>
     </ng-template>
-    <ng-template #body let-proyecto>
+    
+    <ng-template #body let-proyecto> 
       <tr>
         <td>{{ proyecto.nombre }}</td>
         <td>{{ proyecto.cliente ? proyecto.cliente.nombre : '' }}</td>
@@ -33,6 +35,7 @@
         </td>
       </tr>
     </ng-template>
+    
     <ng-template #emptymessage>
       <tr>
         <td colspan="4">No se encontraron proyectos.</td>

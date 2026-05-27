@@ -7,8 +7,8 @@ export class CreateTareaDto {
   @IsNotEmpty()
   descripcion!: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty()
   @IsNumber()
-  @IsOptional()
-  idMeta?: number;
+  @IsNotEmpty()
+  idMeta!: number;
 }

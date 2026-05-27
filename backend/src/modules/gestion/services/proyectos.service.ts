@@ -108,6 +108,30 @@ export class ProyectosService {
       }
     }
 
+    if (dto.estado === EstadosProyectosEnum.FINALIZADO) {
+      const metasNoFinalizadas = await this.metaRepository.count({
+        where: {
+          idProyecto: id,
+          estado: EstadosMetasEnum.ACTIVO,
+        },
+      });
+
+      const tareasNoFinalizadas = await this.tareaRepository.count({
+        where: {
+          idProyecto: id,
+          estado: EstadosTareasEnum.PENDIENTE,
+        },
+      });
+
+      if (metasNoFinalizadas > 0 || tareasNoFinalizadas > 0) {
+        throw new BadRequestException(
+          'No se puede finalizar el proyecto porque tiene metas sin finalizar',
+        );
+      }
+    }
+
+    const estadoAnterior = proyecto.estado;
+
     this.repository.merge(proyecto, dto);
 
     if (dto.estado === EstadosProyectosEnum.BAJA) {
@@ -119,6 +143,19 @@ export class ProyectosService {
       await this.tareaRepository.update(
         { idProyecto: id },
         { estado: EstadosTareasEnum.BAJA },
+      );
+    } else if (
+      estadoAnterior === EstadosProyectosEnum.BAJA &&
+      dto.estado === EstadosProyectosEnum.ACTIVO
+    ) {
+      await this.metaRepository.update(
+        { idProyecto: id, estado: EstadosMetasEnum.BAJA },
+        { estado: EstadosMetasEnum.ACTIVO },
+      );
+
+      await this.tareaRepository.update(
+        { idProyecto: id, estado: EstadosTareasEnum.BAJA },
+        { estado: EstadosTareasEnum.PENDIENTE },
       );
     }
 

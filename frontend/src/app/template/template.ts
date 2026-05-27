@@ -1,16 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
+import { RouterLink } from '@angular/router';
 import { AuthStore } from '../auth/auth-store';
 
 @Component({
   selector: 'app-template',
   templateUrl: './template.html',
   styleUrl: './template.css',
-  imports: [ButtonModule],
+  imports: [ButtonModule, RouterLink],
 })
 export class Template {
-  private readonly authStore: AuthStore = inject(AuthStore);
-
+  private readonly authStore: AuthStore = inject(AuthStore); 
+  
   cerrarSesion() {
     this.authStore.cerrarSesion();
   }

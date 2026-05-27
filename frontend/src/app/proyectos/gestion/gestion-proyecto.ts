@@ -40,31 +40,33 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgSelectModule,
   ],
 })
+
 export class GestionProyecto {
+  
   visible: ModelSignal<boolean> = model(false);
-
+  
   readonly dialogClientesVisible: WritableSignal<boolean> = signal<boolean>(false);
-
+  
   proyectoSeleccionado: ModelSignal<ListProyectoDTO | null> = model<ListProyectoDTO | null>(null);
-
+  
   readonly estados: WritableSignal<string[]> = signal(Object.values(EstadosProyectosEnum));
-
+  
   private readonly messageService: MessageService = inject(MessageService);
-
+  
   private readonly gestionProyectoApiClient = inject(GestionProyectoApiClient);
-
+  
   readonly clientes: WritableSignal<ListClienteDTO[]> = signal<ListClienteDTO[]>([]);
-
-  private readonly clientesListadoApiClient: ClientesListadoApiClient =
-    inject(ClientesListadoApiClient);
-
+  
+  private readonly clientesListadoApiClient: ClientesListadoApiClient = inject(ClientesListadoApiClient);
+  
   header: Signal<string> = computed(() => {
+    
     if (this.proyectoSeleccionado()) {
       return 'Editar proyecto';
     }
     return 'Crear proyecto';
   });
-
+  
   readonly form: FormGroup = new FormGroup({
     nombre: new FormControl('', [Validators.required]),
     cliente: new FormControl(null),
@@ -72,14 +74,18 @@ export class GestionProyecto {
   });
 
   constructor() {
+    
     effect(() => {
+      
       if (this.proyectoSeleccionado()) {
+        
         this.form.patchValue({
           nombre: this.proyectoSeleccionado()?.nombre,
           cliente: this.proyectoSeleccionado()?.cliente,
           estado: this.proyectoSeleccionado()?.estado,
         });
       } else {
+        
         this.form.reset({
           nombre: '',
           cliente: null,
@@ -87,23 +93,26 @@ export class GestionProyecto {
         });
       }
     });
-
+    
     effect(() => {
       if (!this.dialogClientesVisible()) {
         this.refrescarClientes();
       }
     });
   }
-
+  
   ngOnInit(): void {
     this.refrescarClientes();
   }
-
+  
   refrescarClientes(): void {
+    
     this.clientesListadoApiClient.buscarClientes(EstadosClientesEnum.ACTIVO).subscribe({
+      
       next: (data) => {
         this.clientes.set(data);
       },
+      
       error: (error) => {
         this.messageService.add({
           severity: 'error',
@@ -113,15 +122,20 @@ export class GestionProyecto {
       },
     });
   }
-
+  
   cerrarDialog(): void {
+    
     this.proyectoSeleccionado.set(null);
+    
     this.visible.set(false);
   }
-
+  
   guardarProyecto(): void {
+    
     if (!this.form.valid) {
+      
       this.form.markAllAsTouched();
+      
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -129,28 +143,34 @@ export class GestionProyecto {
       });
       return;
     }
-
+    
     const formRawValue = this.form.getRawValue();
-
+    
     if (this.proyectoSeleccionado()) {
+      
       const dto: UpdateProyectoDto = {
         nombre: formRawValue.nombre,
         idCliente: formRawValue.cliente ? formRawValue.cliente.id : null,
         estado: formRawValue.estado,
       };
+      
       this.gestionProyectoApiClient
         .actualizarProyecto(this.proyectoSeleccionado()?.id!, dto)
         .subscribe({
+          
           next: () => {
             this.messageService.add({
               severity: 'success',
               summary: 'Éxito',
               detail: 'Proyecto actualizado correctamente.',
             });
+            
             this.cerrarDialog();
           },
+          
           error: (err) => {
             let detail: string = '';
+            
             if (err.error.statusCode >= 400 && err.error.statusCode < 500) {
               detail = err.error.message;
             } else {
@@ -159,11 +179,14 @@ export class GestionProyecto {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: detail });
           },
         });
+      
     } else {
+      
       const dto: CreateProyectoDTO = {
         nombre: formRawValue.nombre,
         idCliente: formRawValue.cliente ? formRawValue.cliente.id : null,
       };
+      
       this.gestionProyectoApiClient.crearProyecto(dto).subscribe({
         next: () => {
           this.messageService.add({
@@ -173,8 +196,10 @@ export class GestionProyecto {
           });
           this.cerrarDialog();
         },
+        
         error: (err) => {
           let detail: string = '';
+          
           if (err.error?.statusCode >= 400 && err.error?.statusCode < 500) {
             detail = err.error.message;
           } else {
@@ -185,7 +210,7 @@ export class GestionProyecto {
       });
     }
   }
-
+  
   gestionarClientes(): void {
     this.dialogClientesVisible.set(true);
   }

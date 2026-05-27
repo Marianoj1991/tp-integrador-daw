@@ -7,18 +7,19 @@ import { UpdateTareaDto } from "./update-tarea-dto";
 @Injectable({
     providedIn: "root"
 })
-export class GestionTareaApiClient {
 
+export class GestionTareaApiClient {
+    
     private readonly httpClient: HttpClient = inject(HttpClient);
 
     crearTarea(idProyecto: number | null, tarea: CreateTareaDTO): Observable<{ id: number }> {
         return this.httpClient.post<{ id: number }>("/api/v1/proyectos/" + idProyecto + "/tareas", tarea);
     }
-
+    
     actualizarTarea(idProyecto: number | null, id: number, tarea: UpdateTareaDto): Observable<void> {
         return this.httpClient.put<void>("/api/v1/proyectos/" + idProyecto + "/tareas/" + id, tarea);
     }
-
+    
     exportarCsv(idProyecto: number | null): Observable<Blob> {
         return this.httpClient.get("/api/v1/proyectos/" + idProyecto + "/tareas/export/csv", { responseType: 'blob' }) as Observable<Blob>;
     }

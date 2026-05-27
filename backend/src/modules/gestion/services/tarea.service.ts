@@ -7,6 +7,8 @@ import { EstadosTareasEnum } from '../enums/estados-tareas.enum';
 import { UpdateTareaDto } from '../dtos/input/update-tarea.dto';
 import { Meta } from '../entities/meta.entity';
 import { Proyecto } from '../entities/proyecto.entity';
+import { EstadosProyectosEnum } from '../enums/estados-proyectos.enum';
+import { EstadosMetasEnum } from '../enums/estados-metas.enum';
 
 @Injectable()
 export class TareaService {
@@ -21,29 +23,33 @@ export class TareaService {
     dto: CreateTareaDto,
     idProyecto: number,
   ): Promise<{ id: number; nombre: string }> {
-    let idMeta = dto.idMeta;
-    let meta: Meta | null = null;
+    const proyecto = await this.proyectoRepository.findOne({
+      where: { id: idProyecto },
+    });
+    if (proyecto && proyecto.estado === EstadosProyectosEnum.BAJA) {
+      throw new BadRequestException(
+        'No se puede crear una tarea para un proyecto dado de baja',
+      );
+    }
 
-    // Si se proporciona idMeta, validar que existe
-    if (idMeta) {
-      meta = await this.metaRepository.findOne({
-        where: { id: idMeta },
-      });
-      if (!meta) {
-        throw new BadRequestException(`No existe una meta con id ${idMeta}`);
-      }
-    } else {
-      // Si no se proporciona, obtener la primera meta del proyecto
-      meta = await this.metaRepository.findOne({
-        where: { idProyecto },
-        order: { id: 'ASC' },
-      });
-      if (!meta) {
-        throw new BadRequestException(
-          `El proyecto ${idProyecto} no tiene metas asociadas`,
-        );
-      }
-      idMeta = meta.id;
+    const idMeta = dto.idMeta;
+    const meta = await this.metaRepository.findOne({
+      where: { id: idMeta },
+    });
+    if (!meta) {
+      throw new BadRequestException(`No existe una meta con id ${idMeta}`);
+    }
+
+    if (meta.estado === EstadosMetasEnum.BAJA) {
+      throw new BadRequestException(
+        'No se puede crear una tarea asociada a una meta dada de baja',
+      );
+    }
+
+    if (meta.estado === EstadosMetasEnum.FINALIZADA) {
+      throw new BadRequestException(
+        'No se puede crear una tarea asociada a una meta finalizada',
+      );
     }
 
     const tarea: Tarea = this.tareaRepository.create({
@@ -63,6 +69,30 @@ export class TareaService {
 
     if (!tarea) {
       throw new BadRequestException(`No existe una tarea con id ${idTarea}`);
+    }
+
+    const proyecto = await this.proyectoRepository.findOne({
+      where: { id: tarea.idProyecto },
+    });
+    if (proyecto && proyecto.estado === EstadosProyectosEnum.BAJA) {
+      throw new BadRequestException(
+        'No se puede modificar una tarea de un proyecto dado de baja',
+      );
+    }
+
+    const meta = await this.metaRepository.findOne({
+      where: { id: tarea.idMeta },
+    });
+    if (meta && meta.estado === EstadosMetasEnum.BAJA) {
+      throw new BadRequestException(
+        'No se puede modificar una tarea asociada a una meta dada de baja',
+      );
+    }
+
+    if (meta && meta.estado === EstadosMetasEnum.FINALIZADA) {
+      throw new BadRequestException(
+        'No se puede modificar una tarea asociada a una meta finalizada',
+      );
     }
 
     this.tareaRepository.merge(tarea, dto);

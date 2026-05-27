@@ -6,6 +6,7 @@ import { ProyectoDTO } from "./proyecto-dto";
 @Injectable({
     providedIn: 'root'
 })
+
 export class ProyectoApiClient {
 
     private readonly httpClient = inject(HttpClient);

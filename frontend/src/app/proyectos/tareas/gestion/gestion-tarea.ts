@@ -18,7 +18,7 @@ import { CreateTareaDTO } from "./create-tarea-dto";
     imports: [DialogModule, InputTextModule, SelectModule, ButtonModule, ReactiveFormsModule]
 })
 export class GestionTarea {
-
+    
     visible: ModelSignal<boolean> = model(false);
 
     tareaSeleccionada: ModelSignal<ListTareaDTO | null> = model<ListTareaDTO | null>(null);
@@ -31,6 +31,16 @@ export class GestionTarea {
 
     readonly idProyecto: InputSignal<number | null> = input<number | null>(null);
 
+    readonly metas: InputSignal<{ id: number; nombre: string; estado: string }[] | null> = input<{ id: number; nombre: string; estado: string }[] | null>(null);
+
+    readonly metasFiltradas: Signal<{ id: number; nombre: string; estado: string }[]> = computed(() => {
+        const listadoMetas = this.metas() || [];
+        if (this.tareaSeleccionada()) {
+            return listadoMetas;
+        }
+        return listadoMetas.filter(m => m.estado === 'ACTIVO');
+    });
+
     header: Signal<string> = computed(() => {
         if (this.tareaSeleccionada()) {
             return "Editar tarea";
@@ -40,7 +50,8 @@ export class GestionTarea {
 
     readonly form: FormGroup = new FormGroup({
         descripcion: new FormControl("", [Validators.required]),
-        estado: new FormControl(null)
+        estado: new FormControl(null),
+        idMeta: new FormControl(null, [Validators.required])
     });
 
     constructor() {
@@ -48,14 +59,18 @@ export class GestionTarea {
             if (this.tareaSeleccionada()) {
                 this.form.patchValue({
                     descripcion: this.tareaSeleccionada()?.descripcion,
-                    estado: this.tareaSeleccionada()?.estado
+                    estado: this.tareaSeleccionada()?.estado,
+                    idMeta: this.tareaSeleccionada()?.idMeta
                 });
+                this.form.get('idMeta')?.disable();
             }
             else {
                 this.form.reset({
                     descripcion: "",
-                    estado: null
+                    estado: null,
+                    idMeta: null
                 });
+                this.form.get('idMeta')?.enable();
             }
         });
     }
@@ -101,7 +116,8 @@ export class GestionTarea {
             });
         } else {
             const dto: CreateTareaDTO = {
-                descripcion: formRawValue.descripcion
+                descripcion: formRawValue.descripcion,
+                idMeta: formRawValue.idMeta
             };
             this.gestionTareaApiClient.crearTarea(this.idProyecto(), dto).subscribe({
                 next: () => {

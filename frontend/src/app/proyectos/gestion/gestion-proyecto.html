@@ -5,10 +5,12 @@
   [style]="{ width: '25rem' }"
   (onHide)="cerrarDialog()"
 >
+  
   <form [formGroup]="form">
     <div id="contenedor-formulario">
+      
       <input pInputText type="text" id="nombre" placeholder="Nombre" formControlName="nombre" />
-
+      
       <ng-select
         formControlName="cliente"
         [items]="clientes()"
@@ -16,7 +18,7 @@
         placeholder="Cliente"
         [clearable]="true"
       />
-
+      
       <button
         id="boton-gestionar-clientes"
         pButton
@@ -34,9 +36,10 @@
           appendTo="body"
         />
       }
-
+      
       <button pButton id="guardar" label="Guardar" (click)="guardarProyecto()"></button>
     </div>
   </form>
 </p-dialog>
+
 <app-clientes-listado [(visible)]="dialogClientesVisible"></app-clientes-listado>

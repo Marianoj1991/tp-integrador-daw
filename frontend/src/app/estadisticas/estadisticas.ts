@@ -27,7 +27,6 @@ export class EstadisticasComponent implements OnInit {
       });
   }
 
-  
   onOcultar() {
     this.visible = false; 
     this.visibleChange.emit(this.visible);
