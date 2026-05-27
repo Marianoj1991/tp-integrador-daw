@@ -7,12 +7,13 @@ import { ButtonModule } from 'primeng/button';
 import { Template } from '../../template/template';
 import { TooltipModule } from 'primeng/tooltip';
 import { GestionProyecto } from '../gestion/gestion-proyecto';
+import { EstadisticasComponent } from '../../estadisticas/estadisticas';
 
 @Component({
   selector: 'app-proyectos-listado',
   templateUrl: './proyectos-listado.html',
   styleUrls: ['./proyectos-listado.css'],
-  imports: [TableModule, ButtonModule, Template, TooltipModule, GestionProyecto],
+  imports: [TableModule, ButtonModule, Template, TooltipModule, GestionProyecto, EstadisticasComponent],
 })
 export class ProyectosListado implements OnInit {
   private readonly messageService: MessageService = inject(MessageService);
@@ -25,6 +26,8 @@ export class ProyectosListado implements OnInit {
   proyectos: WritableSignal<ListProyectoDTO[]> = signal([]);
 
   dialogVisible: WritableSignal<boolean> = signal(false);
+
+  estadisticasVisible: WritableSignal<boolean> = signal(false)
 
   proyectoSeleccionado: WritableSignal<ListProyectoDTO | null> = signal<ListProyectoDTO | null>(
     null,
@@ -59,6 +62,10 @@ export class ProyectosListado implements OnInit {
 
   crearProyecto(): void {
     this.dialogVisible.set(true);
+  }
+
+  abrirEstadisticas(): void{
+    this.estadisticasVisible.set(true);
   }
 
   editarProyecto(proyecto: ListProyectoDTO): void {
