@@ -1,0 +1,5 @@
+.metas-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem;
+}

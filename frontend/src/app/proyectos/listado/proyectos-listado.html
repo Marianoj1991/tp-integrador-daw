@@ -29,6 +29,8 @@
         <td>
           <p-button id="boton-gestionar-tareas" icon="pi pi-list" pTooltip="Gestionar Tareas"
             (click)="gestionarTareas(proyecto)"></p-button>
+          <p-button id="boton-gestionar-metas" icon="pi pi-flag" pTooltip="Gestionar Metas" [style]="{'margin-left': '.25rem'}"
+            (click)="metasDlg.open(proyecto.id)"></p-button>
           <p-button icon="pi pi-pencil" pTooltip="Editar Proyecto" (click)="editarProyecto(proyecto)"></p-button>
         </td>
       </tr>
@@ -45,3 +47,5 @@
 
 <app-gestion-proyecto [(visible)]="dialogVisible"
   [(proyectoSeleccionado)]="proyectoSeleccionado"></app-gestion-proyecto>
+
+<app-metas-dialog #metasDlg></app-metas-dialog>
