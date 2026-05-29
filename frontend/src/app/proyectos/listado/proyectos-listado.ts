@@ -8,12 +8,13 @@ import { Template } from '../../template/template';
 import { TooltipModule } from 'primeng/tooltip';
 import { GestionProyecto } from '../gestion/gestion-proyecto';
 import { EstadisticasComponent } from '../../estadisticas/estadisticas';
+import { MetasDialog } from '../metas/metas-dialog';
 
 @Component({
   selector: 'app-proyectos-listado',
   templateUrl: './proyectos-listado.html',
   styleUrls: ['./proyectos-listado.css'],
-  imports: [TableModule, ButtonModule, Template, TooltipModule, GestionProyecto, EstadisticasComponent],
+  imports: [TableModule, ButtonModule, Template, TooltipModule, GestionProyecto, EstadisticasComponent, MetasDialog],
 })
 export class ProyectosListado implements OnInit {
   private readonly messageService: MessageService = inject(MessageService);
