@@ -29,11 +29,13 @@
         <td>{{ proyecto.cliente ? proyecto.cliente.nombre : '' }}</td>
         <td>{{ proyecto.estado }}</td>
         <td>
-          <p-button id="boton-gestionar-tareas" icon="pi pi-list" pTooltip="Gestionar Tareas"
-            (click)="gestionarTareas(proyecto)"></p-button>
-          <p-button id="boton-gestionar-metas" icon="pi pi-flag" pTooltip="Gestionar Metas" [style]="{'margin-left': '.25rem'}"
-            (click)="gestionarMetas(proyecto)"></p-button>
-          <p-button icon="pi pi-pencil" pTooltip="Editar Proyecto" (click)="editarProyecto(proyecto)"></p-button>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <p-button id="boton-gestionar-tareas" icon="pi pi-list" pTooltip="Gestionar Tareas"
+              (click)="gestionarTareas(proyecto)"></p-button>
+            <p-button id="boton-gestionar-metas" icon="pi pi-flag" pTooltip="Gestionar Metas"
+              (click)="gestionarMetas(proyecto)"></p-button>
+            <p-button icon="pi pi-pencil" pTooltip="Editar Proyecto" (click)="editarProyecto(proyecto)"></p-button>
+          </div>
         </td>
       </tr>
     </ng-template>

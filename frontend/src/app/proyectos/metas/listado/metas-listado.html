@@ -1,25 +1,12 @@
-<!--
-    Modal que se encarga de listar las metas de un proyecto.
-    Tiene las siguientes propiedades:
-        header: string - Titulo del modal.
-        modal: boolean - Indica si el modal es modal.
-        visible: boolean - Indica si el modal es visible.
-    Tiene los siguientes eventos:
-        crearMeta: void - Crea una nueva meta.
-        editarMeta: void - Edita una meta existente.
--->
+
 <p-dialog header="Metas del Proyecto" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }">
-    <!--
-        Boton para crear una meta. Se habilita si el estado del proyecto es ACTIVO.
-    -->
+    
     <p-button id="boton-crear-meta" icon="pi pi-plus" label="Crear Meta" (click)="crearMeta()" [disabled]="proyectoEstado() === 'BAJA'"></p-button>
     <span style="margin-left: .5rem; display: inline-block">
         <p-button id="boton-exportar-metas" icon="pi pi-download" label="Exportar CSV" (click)="exportarCsv()"></p-button>
     </span>
 
-    <!--
-        Tabla que muestra las metas del proyecto con su nombre, estado y acciones.
-    -->
+    
     <p-table id="tabla" [value]="metas()" [scrollable]="true" scrollHeight="50vh">
         <ng-template #header>
             <tr>
@@ -33,16 +20,12 @@
                 <td>{{ meta.nombre }}</td>
                 <td>{{ meta.estado }}</td>
                 <td>
-                    <!--
-                        Boton para editar una meta. Se habilita si el estado del proyecto es ACTIVO.
-                    -->
+                    
                     <p-button icon="pi pi-pencil" pTooltip="Editar Meta" (click)="editarMeta(meta)" [disabled]="proyectoEstado() === 'BAJA'"></p-button>
                 </td>
             </tr>
         </ng-template>
-        <!-- 
-            Mensaje que se muestra cuando no hay metas para el proyecto.
-        -->
+        
         <ng-template #emptymessage>
             <tr>
                 <td colspan="3">No se encontraron metas para este proyecto.</td>
@@ -50,11 +33,5 @@
         </ng-template>
     </p-table>
 </p-dialog>
-<!-- 
-    Componente que se encarga de la gestion de metas.
-    Tiene las siguientes propiedades:
-        visible: boolean - Indica si el modal es visible.
-        idProyecto: number - ID del proyecto.
-        metaSeleccionada: any - Meta seleccionada.
--->
+
 <app-gestion-meta [(visible)]="dialogCrearMetaVisible" [idProyecto]="idProyecto()" [(metaSeleccionada)]="metaSeleccionada"></app-gestion-meta>
