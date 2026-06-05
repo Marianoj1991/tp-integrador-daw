@@ -1,3 +1,4 @@
+frontend/.angular
 
 backend/docker-compose.yml
 # Ignorar node_modules en ambos proyectos
