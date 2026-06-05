@@ -28,5 +28,8 @@ export class MetasListadoApiClient {
     return this.httpClient.get<ListMetaDTO[]>(`/api/v1/metas/proyecto/${idProyecto}`);
   }
 
+  exportarCsv(idProyecto: number): Observable<Blob> {
+    return this.httpClient.get(`/api/v1/metas/proyecto/${idProyecto}/export/csv`, { responseType: 'blob' }) as Observable<Blob>;
+  }
 }
 

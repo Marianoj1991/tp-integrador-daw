@@ -13,6 +13,9 @@
         Boton para crear una meta. Se habilita si el estado del proyecto es ACTIVO.
     -->
     <p-button id="boton-crear-meta" icon="pi pi-plus" label="Crear Meta" (click)="crearMeta()" [disabled]="proyectoEstado() === 'BAJA'"></p-button>
+    <span style="margin-left: .5rem; display: inline-block">
+        <p-button id="boton-exportar-metas" icon="pi pi-download" label="Exportar CSV" (click)="exportarCsv()"></p-button>
+    </span>
 
     <!--
         Tabla que muestra las metas del proyecto con su nombre, estado y acciones.

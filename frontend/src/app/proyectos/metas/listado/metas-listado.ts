@@ -105,4 +105,30 @@ export class MetasListado {
     this.metaSeleccionada.set(meta);
   }
 
+  /*
+    Metodo que se encarga de exportar las metas del proyecto a un archivo CSV.
+  */
+  exportarCsv(): void {
+    const id = this.idProyecto();
+    if (!id) {
+      this.messageService.add({ severity: 'warn', summary: 'Atención', detail: 'No hay proyecto seleccionado' });
+      return;
+    }
+
+    this.metasListadoApiClient.exportarCsv(id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob as Blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `metas-${id}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al exportar CSV' });
+      }
+    });
+  }
 }

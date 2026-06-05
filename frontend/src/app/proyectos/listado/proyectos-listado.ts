@@ -8,12 +8,13 @@ import { Template } from '../../template/template';
 import { TooltipModule } from 'primeng/tooltip';
 import { GestionProyecto } from '../gestion/gestion-proyecto';
 import { EstadisticasComponent } from '../../estadisticas/estadisticas';
+import { MetasListado } from '../metas/listado/metas-listado';
 
 @Component({
   selector: 'app-proyectos-listado',
   templateUrl: './proyectos-listado.html',
   styleUrls: ['./proyectos-listado.css'],
-  imports: [TableModule, ButtonModule, Template, TooltipModule, GestionProyecto, EstadisticasComponent],
+  imports: [TableModule, ButtonModule, Template, TooltipModule, GestionProyecto, EstadisticasComponent, MetasListado],
 })
 export class ProyectosListado implements OnInit { 
   private readonly messageService: MessageService = inject(MessageService); 
@@ -32,6 +33,10 @@ export class ProyectosListado implements OnInit {
   proyectoSeleccionado: WritableSignal<ListProyectoDTO | null> = signal<ListProyectoDTO | null>(
     null,
   );
+
+  dialogMetasVisible: WritableSignal<boolean> = signal(false);
+  proyectoSeleccionadoId: WritableSignal<number | null> = signal(null);
+  proyectoSeleccionadoEstado: WritableSignal<string | null> = signal(null);
 
   constructor() { 
     effect(() => { 
@@ -75,6 +80,12 @@ export class ProyectosListado implements OnInit {
 
   gestionarTareas(proyecto: ListProyectoDTO): void { 
     window.open(`/proyectos/${proyecto.id}/tareas`, '_blank'); 
+  }
+
+  gestionarMetas(proyecto: ListProyectoDTO): void {
+    this.proyectoSeleccionadoId.set(proyecto.id);
+    this.proyectoSeleccionadoEstado.set(proyecto.estado);
+    this.dialogMetasVisible.set(true);
   }
 
   exportarCsv(): void { 
