@@ -11,11 +11,27 @@ import { UpdateMetaDTO } from "./update-meta-dto";
 export class GestionMetaApiClient {
     private readonly httpClient: HttpClient = inject(HttpClient);
 
-    crearMeta(tarea: CreateMetaDTO): Observable<{ id: number }> {
-        return this.httpClient.post<{ id: number }>("/api/v1/metas", tarea);
+    /*
+        Este metodo crea una meta
+        @param meta - payload
+        @return Observable con el id de la meta creada
+    */
+    crearMeta(meta: CreateMetaDTO): Observable<{ id: number }> {
+        // Se hace la peticion POST al endpoint /api/v1/metas para crear una meta
+        // Entre parentesis se pasa el endpoint y se le pasa el dto de create como cuerpo.
+        return this.httpClient.post<{ id: number }>("/api/v1/metas", meta);
     }
 
-    actualizarMeta(id: number, tarea: UpdateMetaDTO): Observable<void> {
-        return this.httpClient.put<void>("/api/v1/metas/" + id, tarea);
+    /*
+        Este metodo actualiza una meta
+        @param id 
+        @param meta - payload
+        @return Observable con void
+    */
+
+    actualizarMeta(id: number, meta: UpdateMetaDTO): Observable<void> {
+        // Se hace la peticion PUT al endpoint /api/v1/metas/id para actualizar una meta
+        // Entre parentesis se pasa el endpoint y se le pasa el dto de update como cuerpo.
+        return this.httpClient.put<void>("/api/v1/metas/" + id, meta);
     }
 }

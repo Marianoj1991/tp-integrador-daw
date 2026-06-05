@@ -1,5 +1,34 @@
-<p-dialog [header]="header()" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }" [visible]="visible()"
+<!--   
+
+En el p-dialog: 
+- header="": Es una propiedad que recibe una cadena de texto que se muestra en el header del dialogo.
+- modal="true": Es una propiedad que indica que el dialogo es modal, es decir, que no se puede interactuar con el resto de la pagina mientras el dialogo esta abierto.
+- [(visible)]="visible": Es una propiedad que indica que el dialogo es visible. Cuando cambia su valor, se muestra o se oculta el dialogo.
+- (onHide)="cerrarDialog()": Es una propiedad que recibe una funcion que se ejecuta cuando se cierra el dialogo.
+--> 
+
+<p-dialog [header]="header()" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }"
     (onHide)="cerrarDialog()">
+
+    <!--
+    
+        En el form:
+        <form [formGroup]="form"> -> Define el formulario. Los formularios reactivos de Angular se definen con FormGroup. 
+        
+        Dentro del form, se tiene:
+        - Un div con id="contenedor-formulario" que contiene los campos del formulario.
+        
+         Dentro del div, se tiene:
+        - Un input con propiedades:
+            - pInputText -> Es una directiva de PrimeNG que convierte un input HTML en un input de PrimeNG.
+            - type="text" -> Es una propiedad de HTML que indica que el input es de tipo texto.
+            - id="nombre" -> Es una propiedad de HTML que indica que el id del input es "nombre".
+            - placeholder="Nombre de la meta" -> Es una propiedad de HTML que indica que el placeholder del input es "Nombre de la meta".
+            - formControlName="nombre" -> Es una propiedad de Angular que indica que el control del formulario es "nombre".
+        
+         Luego tenemos una condicion que verifica si se tiene una meta seleccionada. 
+         Si es asi, se muestra un p-select con los estados de la meta, osea que estamos en modo edicion.
+    -->
 
     <form [formGroup]="form">
         <div id="contenedor-formulario">
@@ -12,6 +41,15 @@
 
         </div>
     </form>
+
+    <!-- 
+    
+        En el boton tenemos: 
+        - pButton -> Es una directiva de PrimeNG que convierte un boton HTML en un boton de PrimeNG.
+        - id="guardar-meta" -> Es una propiedad de HTML que indica que el id del boton es "guardar-meta".
+        - label="Guardar" -> Es una propiedad de HTML que indica que el label del boton es "Guardar".
+        - (click)="guardarMeta()" -> Es una propiedad de Angular que indica que la funcion "guardarMeta" se ejecuta cuando se hace click en el boton.
+    -->
 
     <button pButton id="guardar-meta" label="Guardar" (click)="guardarMeta()"></button>
 

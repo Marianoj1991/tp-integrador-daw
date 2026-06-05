@@ -52,6 +52,10 @@ body {
   box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
 }
 
+input.ng-invalid.ng-touched, .p-inputtext.ng-invalid.ng-touched {
+  border: 2px solid #ef4444 !important;
+}
+
 ::ng-deep .p-datatable {
   border-radius: 8px !important;
   overflow: hidden !important;
