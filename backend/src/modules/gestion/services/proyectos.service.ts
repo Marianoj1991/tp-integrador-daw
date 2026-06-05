@@ -15,12 +15,20 @@ import { ProyectoDTO } from '../dtos/output/proyecto.dto';
 import { ListTareaDTO } from '../dtos/output/list-tarea.dto';
 import { ClientesService } from './clientes.service';
 import { ListClienteDTO } from '../dtos/output/list-cliente.dto';
+import { Meta } from '../entities/meta.entity';
+import { Tarea } from '../entities/tarea.entity';
+import { EstadosMetasEnum } from '../enums/estados-metas.enum';
+import { EstadosTareasEnum } from '../enums/estados-tareas.enum';
 
 @Injectable()
 export class ProyectosService {
   constructor(
     @InjectRepository(Proyecto)
     private readonly repository: Repository<Proyecto>,
+    @InjectRepository(Meta)
+    private readonly metaRepository: Repository<Meta>,
+    @InjectRepository(Tarea)
+    private readonly tareaRepository: Repository<Tarea>,
     @Inject(forwardRef(() => ClientesService))
     private readonly clientesService: ClientesService,
   ) {}
@@ -43,10 +51,46 @@ export class ProyectosService {
     return { id: proyecto.id };
   }
 
+  async exportProyectosCsv(): Promise<string> {
+    const proyectos: ListProyectoDTO[] = await this.obtenerProyectos();
+
+    const escape = (val: any) => {
+      if (val === null || val === undefined) return '';
+      const s = String(val);
+      if (s.includes('"') || s.includes(',') || s.includes('\n')) {
+        return '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    };
+
+    const headers = [
+      'id',
+      'nombre',
+      'estado',
+      'cliente_id',
+      'cliente_nombre',
+      'cliente_estado',
+    ];
+
+    const rows = proyectos.map((p) => [
+      p.id,
+      p.nombre,
+      p.estado,
+      p.cliente?.id ?? '',
+      p.cliente?.nombre ?? '',
+      p.cliente?.estado ?? '',
+    ]);
+
+    const csvLines = [headers.join(',')].concat(
+      rows.map((r) => r.map((c) => escape(c)).join(',')),
+    );
+
+    return csvLines.join('\n');
+  }
+
   async actualizarProyecto(id: number, dto: UpdateProyectoDto): Promise<void> {
     const proyecto: Proyecto | null = await this.repository.findOne({
       where: { id },
-      relations: ['cliente'],
     });
 
     if (!proyecto) {
@@ -64,7 +108,56 @@ export class ProyectosService {
       }
     }
 
+    if (dto.estado === EstadosProyectosEnum.FINALIZADO) {
+      const metasNoFinalizadas = await this.metaRepository.count({
+        where: {
+          idProyecto: id,
+          estado: EstadosMetasEnum.ACTIVO,
+        },
+      });
+
+      const tareasNoFinalizadas = await this.tareaRepository.count({
+        where: {
+          idProyecto: id,
+          estado: EstadosTareasEnum.PENDIENTE,
+        },
+      });
+
+      if (metasNoFinalizadas > 0 || tareasNoFinalizadas > 0) {
+        throw new BadRequestException(
+          'No se puede finalizar el proyecto porque tiene metas sin finalizar',
+        );
+      }
+    }
+
+    const estadoAnterior = proyecto.estado;
+
     this.repository.merge(proyecto, dto);
+
+    if (dto.estado === EstadosProyectosEnum.BAJA) {
+      await this.metaRepository.update(
+        { idProyecto: id },
+        { estado: EstadosMetasEnum.BAJA },
+      );
+
+      await this.tareaRepository.update(
+        { idProyecto: id },
+        { estado: EstadosTareasEnum.BAJA },
+      );
+    } else if (
+      estadoAnterior === EstadosProyectosEnum.BAJA &&
+      dto.estado === EstadosProyectosEnum.ACTIVO
+    ) {
+      await this.metaRepository.update(
+        { idProyecto: id, estado: EstadosMetasEnum.BAJA },
+        { estado: EstadosMetasEnum.ACTIVO },
+      );
+
+      await this.tareaRepository.update(
+        { idProyecto: id, estado: EstadosTareasEnum.BAJA },
+        { estado: EstadosTareasEnum.PENDIENTE },
+      );
+    }
 
     await this.repository.save(proyecto);
   }
@@ -97,8 +190,8 @@ export class ProyectosService {
   async obtenerProyecto(id: number): Promise<ProyectoDTO> {
     const proyecto: Proyecto | null = await this.repository.findOne({
       where: { id },
-      relations: ['cliente', 'tareas'],
-      order: { tareas: { id: 'ASC' } },
+      relations: ['cliente', 'tareas', 'metas'],
+      order: { tareas: { id: 'ASC' }, metas: { id: 'ASC' } },
     });
 
     if (!proyecto) {
@@ -117,10 +210,24 @@ export class ProyectosService {
       tareaDto.id = t.id;
       tareaDto.descripcion = t.descripcion;
       tareaDto.estado = t.estado;
+      tareaDto.idMeta = t.idMeta;
       tareas.push(tareaDto);
     }
 
     dto.tareas = tareas;
+
+    const metas: { id: number; nombre: string; estado: EstadosMetasEnum }[] =
+      [];
+    if (proyecto.metas) {
+      for (const m of proyecto.metas) {
+        metas.push({
+          id: m.id,
+          nombre: m.nombre,
+          estado: m.estado,
+        });
+      }
+    }
+    dto.metas = metas;
 
     return dto;
   }
@@ -129,6 +236,18 @@ export class ProyectosService {
     const existe: boolean = await this.repository.exists({
       where: {
         cliente: { id: idCliente },
+        estado: In([
+          EstadosProyectosEnum.ACTIVO,
+          EstadosProyectosEnum.FINALIZADO,
+        ]),
+      },
+    });
+    return existe;
+  }
+  async existeProyectoActivoPorId(idProyecto: number): Promise<boolean> {
+    const existe: boolean = await this.repository.exists({
+      where: {
+        id: idProyecto,
         estado: In([
           EstadosProyectosEnum.ACTIVO,
           EstadosProyectosEnum.FINALIZADO,

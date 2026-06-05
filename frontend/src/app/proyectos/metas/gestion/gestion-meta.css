@@ -1,0 +1,18 @@
+#contenedor-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+}
+
+#contenedor-formulario input, #contenedor-formulario p-select {
+    width: 100%;
+}
+
+#guardar-meta {
+    width: 100%;
+}
+
+
+

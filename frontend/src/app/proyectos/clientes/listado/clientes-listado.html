@@ -1,0 +1,35 @@
+<p-dialog header="Clientes" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }">
+    <p-button id="boton-crear-cliente" icon="pi pi-plus" label="Crear Cliente" (click)="crearCliente()"></p-button>
+    <span style="margin-left: .5rem; display: inline-block">
+        <p-button id="boton-exportar-clientes" icon="pi pi-download" label="Exportar CSV" (click)="exportarCsv()"></p-button>
+    </span>
+    <p-table id="tabla" [value]="clientes()" [scrollable]="true"
+        scrollHeight="70vh">
+        <ng-template #header>
+            <tr>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-cliente>
+            <tr>
+                <td>{{ cliente.nombre }}</td>
+                <td>{{ cliente.telefono }}</td>
+                <td>{{ cliente.email }}</td>
+                <td>{{ cliente.estado }}</td>
+                <td>
+                    <p-button icon="pi pi-pencil" pTooltip="Editar Cliente" (click)="editarCliente(cliente)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="5">No se encontraron clientes.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>
+<app-gestion-cliente [(visible)]="dialogVisible" [(clienteSeleccionado)]="clienteSeleccionado"></app-gestion-cliente>

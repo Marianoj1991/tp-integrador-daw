@@ -1,0 +1,26 @@
+<p-dialog [header]="header()" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }" [visible]="visible()"
+    (onHide)="cerrarDialog()">
+
+    <form [formGroup]="form">
+        <div id="contenedor-formulario">
+
+            <input pInputText type="text" id="descripcion" placeholder="Descripción" formControlName="descripcion" />
+
+            <p-select id="meta" formControlName="idMeta" [options]="metasFiltradas()" optionLabel="nombre" optionValue="id" placeholder="Meta" appendTo="body" />
+
+            @if (!tareaSeleccionada() && metasFiltradas().length === 0) {
+            <div style="color: red; margin-bottom: 1rem; font-size: 0.9rem; text-align: center;">
+                ⚠️ Debe crear al menos una meta activa en este proyecto antes de poder agregar tareas.
+            </div>
+            }
+
+            @if (tareaSeleccionada()) {
+            <p-select id="estado" formControlName="estado" [options]="estados()" placeholder="Estado" appendTo="body" />
+            }
+
+        </div>
+    </form>
+
+    <button pButton label="Guardar" (click)="guardarTarea()" [disabled]="!tareaSeleccionada() && metasFiltradas().length === 0"></button>
+
+</p-dialog>

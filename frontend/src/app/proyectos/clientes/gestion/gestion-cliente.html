@@ -1,0 +1,21 @@
+<p-dialog [header]="header()" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }" [visible]="visible()"
+    (onHide)="cerrarDialog()">
+
+    <form [formGroup]="form">
+        <div id="contenedor-formulario">
+            <div class="formulario-cliente">
+                <input pInputText type="text" id="nombre" placeholder="Nombre" formControlName="nombre" />
+                <input pInputText type="text" id="telefono" placeholder="Telefono" formControlName="telefono" />
+                <input pInputText type="text" id="email" placeholder="Email" formControlName="email" />
+            </div>
+
+            @if (clienteSeleccionado()) {
+            <p-select id="estado" formControlName="estado" [options]="estados()" placeholder="Estado" appendTo="body" />
+            }
+
+        </div>
+    </form>
+
+    <button pButton label="Guardar" (click)="guardarCliente()"></button>
+
+</p-dialog>

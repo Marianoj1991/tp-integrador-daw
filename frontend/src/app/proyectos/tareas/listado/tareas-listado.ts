@@ -1,0 +1,137 @@
+import { Component, computed, effect, inject, OnInit, Signal, signal, WritableSignal } from "@angular/core";
+import { MessageService } from "primeng/api";
+import { ListTareaDTO } from "./list-tarea-dto";
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from "primeng/button";
+import { Template } from "../../../template/template";
+import { TooltipModule } from 'primeng/tooltip';
+import { GestionTarea } from "../gestion/gestion-tarea";
+import { GestionTareaApiClient } from "../gestion/gestion-tarea-api-client";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ProyectoApiClient } from "./proyecto-api-client";
+import { ProyectoDTO } from "./proyecto-dto";
+import { MetasListado } from "../../metas/listado/metas-listado";
+import { EstadosTareasEnum } from "../estados-tareas-enum";
+
+@Component({
+  selector: "app-tareas-listado",
+  templateUrl: "./tareas-listado.html",
+  styleUrls: ["./tareas-listado.css"],
+  imports: [TableModule, ButtonModule, Template, TooltipModule, GestionTarea, MetasListado]
+})
+
+export class TareasListado implements OnInit {
+  
+  private readonly messageService: MessageService = inject(MessageService);
+  private readonly proyectoApiClient: ProyectoApiClient = inject(ProyectoApiClient);
+  private readonly gestionTareaApiClient: GestionTareaApiClient = inject(GestionTareaApiClient);
+
+  proyecto: WritableSignal<ProyectoDTO | null> = signal(null);
+  
+  tareas: Signal<ListTareaDTO[]> = computed(() => {
+    return this.proyecto()?.tareas || [];
+  });
+  
+  dialogVisible: WritableSignal<boolean> = signal(false);
+  
+  dialogMetasVisible: WritableSignal<boolean> = signal(false);
+  
+  tareaSeleccionada: WritableSignal<ListTareaDTO | null> = signal<ListTareaDTO | null>(null);
+  
+  private readonly router: Router = inject(Router);
+  
+  readonly idProyecto: WritableSignal<number | null> = signal<number | null>(null);
+  
+  private readonly route = inject(ActivatedRoute);
+  
+  constructor() {
+    
+    effect(() => {
+      if (!this.dialogVisible() && !this.dialogMetasVisible()) {
+        this.refreshProyecto();
+      }
+    });
+    
+    this.idProyecto.set(Number(this.route.snapshot.paramMap.get('id')));
+    
+    if (this.idProyecto() === null) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Id de proyecto no válido' });
+      this.router.navigateByUrl("/proyectos");
+    }
+
+  }
+
+  ngOnInit(): void {
+    this.refreshProyecto();
+  }
+
+  refreshProyecto(): void {
+    
+    this.proyectoApiClient.buscarProyecto(this.idProyecto()!).subscribe({
+      
+      next: (data) => {
+        this.proyecto.set(data);
+      },
+      error: (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al obtener el proyecto' });
+      }
+    });
+  }
+
+  crearTarea(): void {
+    this.dialogVisible.set(true);
+  }
+
+  editarTarea(tarea: ListTareaDTO): void {
+    this.dialogVisible.set(true);
+    this.tareaSeleccionada.set(tarea);
+  }
+  
+  abrirDialog(): void {
+    this.dialogVisible.set(true);
+  }
+  
+  exportarCsv(): void {
+    const id = this.idProyecto();
+    if (!id) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Id de proyecto no válido' });
+      return;
+    }
+    this.gestionTareaApiClient.exportarCsv(id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob as Blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `tareas_${id}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al exportar CSV' });
+      }
+    });
+  }
+
+  obtenerNombreMeta(idMeta: number): string {
+    const meta = this.proyecto()?.metas?.find(m => m.id === idMeta);
+    return meta ? meta.nombre : 'Sin Meta';
+  }
+
+  puedeEditarTarea(idMeta: number): boolean {
+    if (this.proyecto()?.estado === 'BAJA') {
+      return false;
+    }
+    const meta = this.proyecto()?.metas?.find(m => m.id === idMeta);
+    if (!meta) {
+      return true;
+    }
+    return meta.estado === 'ACTIVO';
+  }
+
+  gestionarMetas(): void {
+    this.dialogMetasVisible.set(true);
+  }
+
+}

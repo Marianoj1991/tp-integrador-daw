@@ -1,0 +1,19 @@
+#contenedor-formulario{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#nombre{
+    margin-bottom: 1rem;
+}
+
+#estado{
+    margin-bottom: 1rem;
+}
+
+.formulario-cliente input {
+    display: block;
+    margin-bottom: 1rem; 
+    width: 100%;
+}
