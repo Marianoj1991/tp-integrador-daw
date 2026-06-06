@@ -5,7 +5,7 @@ import {
 } from "./chunk-6VCYEF6R.js";
 import {
   CommonModule
-} from "./chunk-GXKATGM4.js";
+} from "./chunk-QJFWYUAJ.js";
 import {
   Component,
   Directive,
@@ -946,4 +946,4 @@ export {
   TranslationKeys,
   TreeDragDropService
 };
-//# sourceMappingURL=chunk-RVEN6GFW.js.map
+//# sourceMappingURL=chunk-LDAM2BSB.js.map
