@@ -18,8 +18,6 @@ export class GestionMetaApiClient {
         return this.httpClient.post<{ id: number }>("/api/v1/metas", meta);
     }
 
-    
-
     actualizarMeta(id: number, meta: UpdateMetaDTO): Observable<void> {
         
         

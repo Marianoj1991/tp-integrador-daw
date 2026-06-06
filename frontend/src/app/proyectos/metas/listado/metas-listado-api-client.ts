@@ -13,8 +13,6 @@ export class MetasListadoApiClient {
   
   buscarMetasPorProyecto(idProyecto: number): Observable<ListMetaDTO[]> {
     
-    
-    
     return this.httpClient.get<ListMetaDTO[]>(`/api/v1/metas/proyecto/${idProyecto}`);
   }
 
