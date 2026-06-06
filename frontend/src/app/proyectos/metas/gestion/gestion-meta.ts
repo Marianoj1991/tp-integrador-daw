@@ -18,10 +18,6 @@ import { GestionMetaApiClient } from "./gestion-meta-api-client";
     imports: [DialogModule, InputTextModule, SelectModule, ButtonModule, ReactiveFormsModule] 
     
     
-    
-    
-    
-    
 })
 
 export class GestionMeta {
