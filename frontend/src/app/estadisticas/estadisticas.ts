@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'; 
-import { HttpClient } from '@angular/common/http';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
-import { DialogModule } from 'primeng/dialog'; 
+import { DialogModule } from 'primeng/dialog';
+import { EstadisticasService } from './estadisticas.service';
 
 @Component({
   selector: 'app-estadisticas',
@@ -11,25 +11,27 @@ import { DialogModule } from 'primeng/dialog';
   templateUrl: './estadisticas.html',
   styleUrls: ['./estadisticas.css']
 })
-export class EstadisticasComponent implements OnInit {
+export class EstadisticasComponent implements OnChanges, OnInit {
   estadisticas: any;
 
   @Input() visible: boolean = false;
   @Output() visibleChange = new EventEmitter<boolean>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private estadisticasService: EstadisticasService) { }
 
-  ngOnInit(): void {
-    this.http.get('/api/v1/estadisticas')
-      .subscribe(data => {
-        console.log('Datos recibidos:', data);
-        this.estadisticas = data;
-      });
+  ngOnInit() {
+    // inicializamos la signal acá
+    this.estadisticas = this.estadisticasService.estadisticas;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['visible'] && this.visible) {
+      this.estadisticasService.cargar();
+    }
   }
 
   onOcultar() {
-    this.visible = false; 
+    this.visible = false;
     this.visibleChange.emit(this.visible);
   }
-
 }
