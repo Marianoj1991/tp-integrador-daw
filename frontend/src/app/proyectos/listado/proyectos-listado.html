@@ -1,19 +1,36 @@
-
 <app-template>
-  <p-button id="boton-crear-proyecto" icon="pi pi-plus" label="Crear Proyecto" (click)="crearProyecto()"></p-button>
+  <p-button
+    id="boton-crear-proyecto"
+    icon="pi pi-plus"
+    label="Crear Proyecto"
+    (click)="crearProyecto()"
+  ></p-button>
 
-  <span style="margin-left: .5rem; display: inline-block">
-    <p-button id="boton-exportar-proyectos" icon="pi pi-download" label="Exportar CSV"
-      (click)="exportarCsv()"></p-button>
+  <span style="margin-left: 0.5rem; display: inline-block">
+    <p-button
+      id="boton-exportar-proyectos"
+      icon="pi pi-download"
+      label="Exportar CSV"
+      (click)="exportarCsv()"
+    ></p-button>
   </span>
 
-  <span style="margin-left: .5rem; display: inline-block">
-    <p-button id="boton-estadisticas" icon="pi pi-chart-bar" label="Ver Estadísticas"
-      (click)="abrirEstadisticas()"></p-button>
+  <span style="margin-left: 0.5rem; display: inline-block">
+    <p-button
+      id="boton-estadisticas"
+      icon="pi pi-chart-bar"
+      label="Ver Estadísticas"
+      (click)="abrirEstadisticas()"
+    ></p-button>
   </span>
 
-  <p-table id="tabla" [value]="proyectos()" [tableStyle]="{ 'min-width': '50rem' }" [scrollable]="true"
-    scrollHeight="70vh">
+  <p-table
+    id="tabla"
+    [value]="proyectos()"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [scrollable]="true"
+    scrollHeight="70vh"
+  >
     <ng-template #header>
       <tr>
         <th>Nombre</th>
@@ -22,24 +39,36 @@
         <th>Acciones</th>
       </tr>
     </ng-template>
-    
-    <ng-template #body let-proyecto> 
+
+    <ng-template #body let-proyecto>
       <tr>
         <td>{{ proyecto.nombre }}</td>
         <td>{{ proyecto.cliente ? proyecto.cliente.nombre : '' }}</td>
         <td>{{ proyecto.estado }}</td>
         <td>
-          <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <p-button id="boton-gestionar-tareas" icon="pi pi-list" pTooltip="Gestionar Tareas"
-              (click)="gestionarTareas(proyecto)"></p-button>
-            <p-button id="boton-gestionar-metas" icon="pi pi-flag" pTooltip="Gestionar Metas"
-              (click)="gestionarMetas(proyecto)"></p-button>
-            <p-button icon="pi pi-pencil" pTooltip="Editar Proyecto" (click)="editarProyecto(proyecto)"></p-button>
+          <div style="display: flex; gap: 0.5rem; align-items: center">
+            <p-button
+              id="boton-gestionar-tareas"
+              icon="pi pi-list"
+              pTooltip="Gestionar Tareas"
+              (click)="gestionarTareas(proyecto)"
+            ></p-button>
+            <p-button
+              id="boton-gestionar-metas"
+              icon="pi pi-flag"
+              pTooltip="Gestionar Metas"
+              (click)="gestionarMetas(proyecto)"
+            ></p-button>
+            <p-button
+              icon="pi pi-pencil"
+              pTooltip="Editar Proyecto"
+              (click)="editarProyecto(proyecto)"
+            ></p-button>
           </div>
         </td>
       </tr>
     </ng-template>
-    
+
     <ng-template #emptymessage>
       <tr>
         <td colspan="4">No se encontraron proyectos.</td>
@@ -50,7 +79,13 @@
 
 <app-estadisticas [(visible)]="estadisticasVisible"></app-estadisticas>
 
-<app-gestion-proyecto [(visible)]="dialogVisible"
-  [(proyectoSeleccionado)]="proyectoSeleccionado"></app-gestion-proyecto>
+<app-gestion-proyecto
+  [(visible)]="dialogVisible"
+  [(proyectoSeleccionado)]="proyectoSeleccionado"
+></app-gestion-proyecto>
 
-<app-metas-listado [(visible)]="dialogMetasVisible" [idProyecto]="proyectoSeleccionadoId()" [proyectoEstado]="proyectoSeleccionadoEstado()"></app-metas-listado>
+<app-metas-listado
+  [(visible)]="dialogMetasVisible"
+  [idProyecto]="proyectoSeleccionadoId()"
+  [proyectoEstado]="proyectoSeleccionadoEstado()"
+></app-metas-listado>
