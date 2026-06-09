@@ -9,26 +9,35 @@ import { TooltipModule } from 'primeng/tooltip';
 import { GestionProyecto } from '../gestion/gestion-proyecto';
 import { EstadisticasComponent } from '../../estadisticas/estadisticas';
 import { MetasListado } from '../metas/listado/metas-listado';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-proyectos-listado',
   templateUrl: './proyectos-listado.html',
   styleUrls: ['./proyectos-listado.css'],
-  imports: [TableModule, ButtonModule, Template, TooltipModule, GestionProyecto, EstadisticasComponent, MetasListado],
+  imports: [
+    TableModule,
+    ButtonModule,
+    Template,
+    TooltipModule,
+    GestionProyecto,
+    EstadisticasComponent,
+    MetasListado,
+  ],
 })
-export class ProyectosListado implements OnInit { 
-  private readonly messageService: MessageService = inject(MessageService); 
+export class ProyectosListado implements OnInit {
+  router: Router = inject(Router);
+
+  private readonly messageService: MessageService = inject(MessageService);
 
   private readonly proyectosListadoApiClient: ProyectosListadoApiClient =
-    inject(ProyectosListadoApiClient); 
-  private readonly proyectosListadoApiClient2: ProyectosListadoApiClient =
-    inject(ProyectosListadoApiClient); 
+    inject(ProyectosListadoApiClient);
 
-  proyectos: WritableSignal<ListProyectoDTO[]> = signal([]); 
+  proyectos: WritableSignal<ListProyectoDTO[]> = signal([]);
 
-  dialogVisible: WritableSignal<boolean> = signal(false); 
+  dialogVisible: WritableSignal<boolean> = signal(false);
 
-  estadisticasVisible: WritableSignal<boolean> = signal(false)
+  estadisticasVisible: WritableSignal<boolean> = signal(false);
 
   proyectoSeleccionado: WritableSignal<ListProyectoDTO | null> = signal<ListProyectoDTO | null>(
     null,
@@ -38,24 +47,24 @@ export class ProyectosListado implements OnInit {
   proyectoSeleccionadoId: WritableSignal<number | null> = signal(null);
   proyectoSeleccionadoEstado: WritableSignal<string | null> = signal(null);
 
-  constructor() { 
-    effect(() => { 
-      if (!this.dialogVisible()) { 
-        this.refrescarProyectos(); 
+  constructor() {
+    effect(() => {
+      if (!this.dialogVisible()) {
+        this.refrescarProyectos();
       }
     });
   }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.refrescarProyectos();
   }
 
-  refrescarProyectos(): void { 
-    this.proyectosListadoApiClient.buscarProyectos().subscribe({ 
-      next: (data) => { 
+  refrescarProyectos(): void {
+    this.proyectosListadoApiClient.buscarProyectos().subscribe({
+      next: (data) => {
         this.proyectos.set(data);
       },
-      error: (error) => { 
+      error: (error) => {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -65,11 +74,11 @@ export class ProyectosListado implements OnInit {
     });
   }
 
-  crearProyecto(): void { 
-    this.dialogVisible.set(true); 
+  crearProyecto(): void {
+    this.dialogVisible.set(true);
   }
 
-  abrirEstadisticas(): void{
+  abrirEstadisticas(): void {
     this.estadisticasVisible.set(true);
   }
 
@@ -78,8 +87,8 @@ export class ProyectosListado implements OnInit {
     this.proyectoSeleccionado.set(proyecto);
   }
 
-  gestionarTareas(proyecto: ListProyectoDTO): void { 
-    window.open(`/proyectos/${proyecto.id}/tareas`, '_blank'); 
+  gestionarTareas(proyecto: ListProyectoDTO): void {
+    this.router.navigate([`/proyectos/${proyecto.id}/tareas`]);
   }
 
   gestionarMetas(proyecto: ListProyectoDTO): void {
@@ -88,8 +97,8 @@ export class ProyectosListado implements OnInit {
     this.dialogMetasVisible.set(true);
   }
 
-  exportarCsv(): void { 
-    this.proyectosListadoApiClient2.exportarCsv().subscribe({
+  exportarCsv(): void {
+    this.proyectosListadoApiClient.exportarCsv().subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob as Blob);
         const a = document.createElement('a');
@@ -101,8 +110,12 @@ export class ProyectosListado implements OnInit {
         window.URL.revokeObjectURL(url);
       },
       error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error al exportar CSV' });
-      }
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Error al exportar CSV',
+        });
+      },
     });
   }
 }

@@ -10,8 +10,8 @@ import { AuthStore } from '../auth/auth-store';
   imports: [ButtonModule, RouterLink],
 })
 export class Template {
-  private readonly authStore: AuthStore = inject(AuthStore); 
-  
+  private readonly authStore: AuthStore = inject(AuthStore);
+
   cerrarSesion() {
     this.authStore.cerrarSesion();
   }
