@@ -1,30 +1,34 @@
 import {
+  Select,
+  SelectModule
+} from "./chunk-CECWLKH3.js";
+import {
+  Scroller,
+  ScrollerModule
+} from "./chunk-THG67FNH.js";
+import "./chunk-LG43QSOS.js";
+import {
   Badge,
   BadgeModule,
   Button,
   ButtonModule
-} from "./chunk-UK2P5H2V.js";
-import {
-  Select,
-  SelectModule
-} from "./chunk-TMYFXYCO.js";
-import "./chunk-RI6IWJJB.js";
+} from "./chunk-DPR4QRVC.js";
 import {
   Ripple
 } from "./chunk-5T7FRX65.js";
 import {
-  Scroller,
-  ScrollerModule
-} from "./chunk-RS4NNMP6.js";
-import {
   BaseEditableHolder,
   BaseInput
-} from "./chunk-NBVC2YCP.js";
+} from "./chunk-LFLOMOUK.js";
+import {
+  InputText,
+  InputTextModule
+} from "./chunk-KXHSVCN6.js";
 import {
   Motion,
   MotionDirective,
   MotionModule
-} from "./chunk-SNB3IN2D.js";
+} from "./chunk-W2P6O5SV.js";
 import {
   ObjectUtils,
   UniqueComponentId,
@@ -33,12 +37,6 @@ import {
 import {
   AutoFocus
 } from "./chunk-R3YCUBNN.js";
-import {
-  ConnectedOverlayScrollHandler,
-  DomHandler,
-  blockBodyScroll,
-  unblockBodyScroll
-} from "./chunk-WWINZQOW.js";
 import {
   AngleDoubleLeftIcon,
   AngleDoubleRightIcon,
@@ -67,10 +65,23 @@ import {
   TrashIcon
 } from "./chunk-AVX6KW5Z.js";
 import {
-  InputText,
-  InputTextModule
-} from "./chunk-VGLRIJQ3.js";
-import "./chunk-ACUO46CG.js";
+  ConnectedOverlayScrollHandler,
+  DomHandler,
+  blockBodyScroll,
+  unblockBodyScroll
+} from "./chunk-WWINZQOW.js";
+import "./chunk-YNKYVOXQ.js";
+import {
+  BaseComponent,
+  PARENT_INSTANCE
+} from "./chunk-KQLNSF64.js";
+import {
+  Bind,
+  BindModule
+} from "./chunk-H22GH57B.js";
+import {
+  BaseStyle
+} from "./chunk-G5TV3GIA.js";
 import {
   FormsModule,
   NG_VALUE_ACCESSOR,
@@ -79,17 +90,6 @@ import {
   NgModel,
   RequiredValidator
 } from "./chunk-TFIRZIJP.js";
-import {
-  BaseComponent,
-  PARENT_INSTANCE
-} from "./chunk-KQLNSF64.js";
-import {
-  BaseStyle
-} from "./chunk-G5TV3GIA.js";
-import {
-  Bind,
-  BindModule
-} from "./chunk-H22GH57B.js";
 import {
   FilterMatchMode,
   FilterOperator,

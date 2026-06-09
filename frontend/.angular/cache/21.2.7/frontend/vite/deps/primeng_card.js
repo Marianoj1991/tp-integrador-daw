@@ -3,12 +3,12 @@ import {
   PARENT_INSTANCE
 } from "./chunk-KQLNSF64.js";
 import {
-  BaseStyle
-} from "./chunk-G5TV3GIA.js";
-import {
   Bind,
   BindModule
 } from "./chunk-H22GH57B.js";
+import {
+  BaseStyle
+} from "./chunk-G5TV3GIA.js";
 import {
   Footer,
   Header,
