@@ -1,40 +1,62 @@
-<p-dialog header="Estadísticas de Proyectos" [(visible)]="visible" (onHide)="onOcultar()" [modal]="true"
-    [style]="{ width: '60vw' }" [breakpoints]="{ '960px': '85vw', '641px': '100vw' }">
-
+<p-dialog header="Estadísticas Generales" [(visible)]="visible" (onHide)="onOcultar()" [modal]="true"
+    [style]="{ width: '40vw', height: '95vh', maxHeight: '95vh' }"
+    [breakpoints]="{ '960px': '95vw', '641px': '100vw' }">
     <div class="estadisticas-container">
         <ng-container *ngIf="estadisticas(); else sinDatos">
-            <div class="cards-container">
-                <p-card header="Proyectos Activos">
-                    <p>{{ estadisticas()?.proyectosActivos }}</p>
+            <h2 class="titulo-seccion">Proyectos</h2>
+            <div class="cards-container verde-recuadro">
+                <p-card header="Activos">
+                    <p>{{ estadisticas()?.proyectos?.activos }}</p>
                 </p-card>
-                <p-card header="Proyectos Finalizados">
-                    <p>{{ estadisticas()?.proyectosFinalizados }}</p>
+                <p-card header="Finalizados">
+                    <p>{{ estadisticas()?.proyectos?.finalizados }}</p>
                 </p-card>
-                <p-card header="Proyectos dados de Baja">
-                    <p>{{ estadisticas()?.proyectosBaja }}</p>
-                </p-card>
-                <p-card header="Tareas Pendientes">
-                    <p>{{ estadisticas()?.tareasPendientes }}</p>
-                </p-card>
-                <p-card header="Tareas Completadas">
-                    <p>{{ estadisticas()?.tareasCompletadas }}</p>
+                <p-card header="Baja">
+                    <p>{{ estadisticas()?.proyectos?.baja }}</p>
                 </p-card>
             </div>
-
-            <h3>Progreso de Tareas</h3>
             <div class="barra">
-                <div class="progreso" [style.width.%]="estadisticas()?.porcentajeCompletadas || 0"></div>
+                <div class="progreso" [style.width.%]="estadisticas()?.proyectos?.porcentajeFinalizados || 0"></div>
             </div>
-            <p>{{ estadisticas()?.porcentajeCompletadas || 0 }}% completadas</p>
+            <p>{{ estadisticas()?.proyectos?.porcentajeFinalizados || 0 }}% Proyectos Finalizados</p>
+
+            <h2 class="titulo-seccion">Tareas</h2>
+            <div class="cards-container verde-recuadro">
+                <p-card header="Pendientes">
+                    <p>{{ estadisticas()?.tareas?.pendientes }}</p>
+                </p-card>
+                <p-card header="Completadas">
+                    <p>{{ estadisticas()?.tareas?.completadas }}</p>
+                </p-card>
+                <p-card header="Baja">
+                    <p>{{ estadisticas()?.tareas?.baja }}</p>
+                </p-card>
+            </div>
+            <div class="barra">
+                <div class="progreso" [style.width.%]="estadisticas()?.tareas?.porcentajeCompletadas || 0"></div>
+            </div>
+            <p>{{ estadisticas()?.tareas?.porcentajeCompletadas || 0 }}% Tareas Completadas</p>
+
+            <h2 class="titulo-seccion">Metas</h2>
+            <div class="cards-container verde-recuadro">
+                <p-card header="Activas">
+                    <p>{{ estadisticas()?.metas?.activas }}</p>
+                </p-card>
+                <p-card header="Completadas">
+                    <p>{{ estadisticas()?.metas?.completadas }}</p>
+                </p-card>
+                <p-card header="Baja">
+                    <p>{{ estadisticas()?.metas?.baja }}</p>
+                </p-card>
+            </div>
+            <div class="barra">
+                <div class="progreso" [style.width.%]="estadisticas()?.metas?.porcentajeCompletadas || 0"></div>
+            </div>
+            <p>{{ estadisticas()?.metas?.porcentajeCompletadas || 0 }}% Metas Completadas</p>
         </ng-container>
 
         <ng-template #sinDatos>
             <p class="mensaje-vacio">No hay estadísticas disponibles.</p>
-            <div class="barra">
-                <div class="progreso" [style.width.%]="0"></div>
-            </div>
-            <p>0% completadas</p>
         </ng-template>
     </div>
-
 </p-dialog>
