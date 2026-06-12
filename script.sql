@@ -33,7 +33,7 @@ CREATE TABLE proyectos (
 
 CREATE TABLE metas (
     id SERIAL PRIMARY KEY,
-    nombre TEXT NOT NULL UNIQUE,
+    nombre TEXT NOT NULL,
     estado estados_metas NOT NULL,
     id_proyecto INT NOT NULL,
     CONSTRAINT fk_metas_proyecto
