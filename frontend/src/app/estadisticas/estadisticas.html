@@ -1,58 +1,64 @@
-<p-dialog header="Estadísticas Generales" [(visible)]="visible" (onHide)="onOcultar()" [modal]="true"
-    [style]="{ width: '40vw', height: '95vh', maxHeight: '95vh' }"
-    [breakpoints]="{ '960px': '95vw', '641px': '100vw' }">
+<p-dialog
+    header="Estadísticas Generales"
+    [(visible)]="visible"
+    (onHide)="onOcultar()"
+    [modal]="true"
+    [style]="{ width: '40vw', maxWidth: '550px' }"
+    [contentStyle]="{ 'max-height': '80vh', 'overflow-y': 'auto' }"
+    [breakpoints]="{ '960px': '85vw', '641px': '95vw' }">
+
     <div class="estadisticas-container">
         <ng-container *ngIf="estadisticas(); else sinDatos">
             <h2 class="titulo-seccion">Proyectos</h2>
             <div class="cards-container verde-recuadro">
                 <p-card header="Activos">
-                    <p>{{ estadisticas()?.proyectos?.activos }}</p>
+                    <p class="numero-card">{{ estadisticas()?.proyectos?.activos }}</p>
                 </p-card>
                 <p-card header="Finalizados">
-                    <p>{{ estadisticas()?.proyectos?.finalizados }}</p>
+                    <p class="numero-card">{{ estadisticas()?.proyectos?.finalizados }}</p>
                 </p-card>
                 <p-card header="Baja">
-                    <p>{{ estadisticas()?.proyectos?.baja }}</p>
+                    <p class="numero-card">{{ estadisticas()?.proyectos?.baja }}</p>
                 </p-card>
             </div>
             <div class="barra">
                 <div class="progreso" [style.width.%]="estadisticas()?.proyectos?.porcentajeFinalizados || 0"></div>
             </div>
-            <p>{{ (estadisticas()?.proyectos?.porcentajeFinalizados || 0) | number:'1.0-2' }}% de proyectos finalizados</p>
+            <p class="texto-porcentaje">{{ (estadisticas()?.proyectos?.porcentajeFinalizados || 0) | number:'1.0-2' }}% de proyectos finalizados</p>
 
             <h2 class="titulo-seccion">Tareas</h2>
             <div class="cards-container verde-recuadro">
                 <p-card header="Pendientes">
-                    <p>{{ estadisticas()?.tareas?.pendientes }}</p>
+                    <p class="numero-card">{{ estadisticas()?.tareas?.pendientes }}</p>
                 </p-card>
-                <p-card header="Completadas">
-                    <p>{{ estadisticas()?.tareas?.completadas }}</p>
+                <p-card header="Completas">
+                    <p class="numero-card">{{ estadisticas()?.tareas?.completadas }}</p>
                 </p-card>
                 <p-card header="Baja">
-                    <p>{{ estadisticas()?.tareas?.baja }}</p>
+                    <p class="numero-card">{{ estadisticas()?.tareas?.baja }}</p>
                 </p-card>
             </div>
             <div class="barra">
                 <div class="progreso" [style.width.%]="estadisticas()?.tareas?.porcentajeCompletadas || 0"></div>
             </div>
-            <p>{{ (estadisticas()?.tareas?.porcentajeCompletadas || 0) | number:'1.0-2' }}% de tareas completadas</p>
+            <p class="texto-porcentaje">{{ (estadisticas()?.tareas?.porcentajeCompletadas || 0) | number:'1.0-2' }}% de tareas completadas</p>
 
             <h2 class="titulo-seccion">Metas</h2>
             <div class="cards-container verde-recuadro">
                 <p-card header="Activas">
-                    <p>{{ estadisticas()?.metas?.activas }}</p>
+                    <p class="numero-card">{{ estadisticas()?.metas?.activas }}</p>
                 </p-card>
-                <p-card header="Completadas">
-                    <p>{{ estadisticas()?.metas?.completadas }}</p>
+                <p-card header="Completas">
+                    <p class="numero-card">{{ estadisticas()?.metas?.completadas }}</p>
                 </p-card>
                 <p-card header="Baja">
-                    <p>{{ estadisticas()?.metas?.baja }}</p>
+                    <p class="numero-card">{{ estadisticas()?.metas?.baja }}</p>
                 </p-card>
             </div>
             <div class="barra">
                 <div class="progreso" [style.width.%]="estadisticas()?.metas?.porcentajeCompletadas || 0"></div>
             </div>
-            <p>{{ (estadisticas()?.metas?.porcentajeCompletadas || 0) | number:'1.0-2' }}% de metas completadas</p>
+            <p class="texto-porcentaje">{{ (estadisticas()?.metas?.porcentajeCompletadas || 0) | number:'1.0-2' }}% de metas completadas</p>
         </ng-container>
 
         <ng-template #sinDatos>
