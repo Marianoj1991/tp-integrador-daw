@@ -1,68 +1,90 @@
 .estadisticas-container {
     max-width: 100%;
-    max-height: 85vh;
-    overflow-y: auto;
     text-align: center;
-    padding-top: 0.3rem;
-    padding-bottom: 0.3rem;
+    padding: 0.5rem 0.2rem;
 }
 
+/* Cambiado de Grid a Flexbox responsivo para mejor control en móviles */
 .cards-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.75rem;
     margin-bottom: 0.5rem;
+}
+
+/* Forzamos a que cada p-card ocupe el mismo ancho distribuido */
+.cards-container p-card {
+    flex: 1;
+    min-width: 0;
 }
 
 .verde-recuadro {
-    border: 0.8px solid #34d399;
-    border-radius: 1px;
-    padding: 0.8rem;
+    border: 1px solid #34d399;
+    border-radius: 8px; /* Un poquito más redondeado queda más moderno */
+    padding: 1rem;
     margin-bottom: 1rem;
-    background-color: rgba(40, 167, 69, 0.05);
+    background-color: rgba(52, 211, 153, 0.03);
 }
 
-.p-card {
-    padding: 0.5rem;
-    font-size: 0.8rem;
-    line-height: 0.2;
-}
-
-.p-dialog .p-dialog-titlebar {
-    margin-bottom: 0.5rem;
-    justify-content: center;
-    text-align: center;
-    font-size: 1.8rem;
+/* Modificadores de texto para las p-card */
+.numero-card {
+    font-size: 1.4rem;
     font-weight: bold;
+    margin: 0.3rem 0 0 0;
+    color: #10b981;
+}
+
+.texto-porcentaje {
+    font-size: 0.9rem;
+    color: #4b5563;
+    margin-bottom: 1.5rem;
 }
 
 .titulo-seccion {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: bold;
-    margin-top: 1rem;
-    margin-bottom: 0.4rem;
-    text-align: center;
+    margin-top: 0.5rem;
+    margin-bottom: 0.6rem;
+    text-align: left;
+    color: #FFFFFF70;
 }
 
 .barra {
     width: 100%;
-    max-width: 350px;
-    height: 14px;
-    background-color: #eee;
-    border-radius: 5px;
-    margin: 0.5rem auto;
+    height: 10px;
+    background-color: #e5e7eb;
+    border-radius: 9999px;
+    margin: 0.8rem auto 0.4rem auto;
     position: relative;
+    overflow: hidden;
 }
 
 .progreso {
     height: 100%;
     background: linear-gradient(90deg, #34d399, #10b981);
-    border-radius: 5px;
+    border-radius: 9999px;
     transition: width 0.5s ease;
 }
 
 .mensaje-vacio {
-    color: #888;
+    color: #9ca3af;
     font-style: italic;
     margin-top: 1rem;
+}
+
+
+@media (max-width: 640px) {
+    .cards-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .titulo-seccion {
+        font-size: 1.2rem;
+    }
+
+    .verde-recuadro {
+        padding: 0.8rem;
+    }
 }
