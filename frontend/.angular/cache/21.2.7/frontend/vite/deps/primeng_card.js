@@ -3,10 +3,6 @@ import {
   PARENT_INSTANCE
 } from "./chunk-KQLNSF64.js";
 import {
-  Bind,
-  BindModule
-} from "./chunk-H22GH57B.js";
-import {
   BaseStyle
 } from "./chunk-G5TV3GIA.js";
 import {
@@ -15,6 +11,10 @@ import {
   PrimeTemplate,
   SharedModule
 } from "./chunk-LDAM2BSB.js";
+import {
+  Bind,
+  BindModule
+} from "./chunk-H22GH57B.js";
 import {
   k
 } from "./chunk-6VCYEF6R.js";
