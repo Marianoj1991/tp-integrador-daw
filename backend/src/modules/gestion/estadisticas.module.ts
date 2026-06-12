@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Proyecto } from 'modules/gestion/entities/proyecto.entity';
 import { Tarea } from 'modules/gestion/entities/tarea.entity';
-import { EstadisticasService } from './estadisticas.service';
-import { EstadisticasController } from './estadisticas.controller';
+import { EstadisticasService } from './services/estadisticas.service';
+import { EstadisticasController } from './controllers/estadisticas.controller';
 import { Meta } from 'modules/gestion/entities/meta.entity';
 
 @Module({
